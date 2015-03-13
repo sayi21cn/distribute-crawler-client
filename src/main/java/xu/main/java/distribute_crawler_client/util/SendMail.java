@@ -28,6 +28,7 @@ import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.CommonConfig;
 import xu.main.java.distribute_crawler_client.config.MailConfig;
+import xu.main.java.distribute_crawler_common.util.StringHandler;
 
 /**
  * 
