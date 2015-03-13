@@ -7,12 +7,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import xu.main.java.distribute_crawler_client.extractor.CssExtractor;
-import xu.main.java.distribute_crawler_client.extractor.IExtractor;
+import xu.main.java.distribute_crawler_client.config.DbConfig;
 import xu.main.java.distribute_crawler_client.util.GsonUtil;
 import xu.main.java.distribute_crawler_client.util.HttpDownload;
 import xu.main.java.distribute_crawler_client.util.MysqlUtil;
 import xu.main.java.distribute_crawler_client.util.StringHandler;
+import xu.main.java.distribute_crawler_common.extractor.ExtractorFactory;
+import xu.main.java.distribute_crawler_common.extractor.IExtractor;
 import xu.main.java.distribute_crawler_common.vo.HtmlPath;
 
 public class TaskTracker extends Thread {
@@ -46,8 +47,8 @@ public class TaskTracker extends Thread {
 		for (String url : urlList) {
 			System.out.println("download: " + url);
 			String html = HttpDownload.download(url, this.charset);
-			IExtractor extractor = new CssExtractor();
-			Map<String, String> resultMap = extractor.extractorColumns(html, cssPathList);
+			IExtractor extractor = ExtractorFactory.getInstance().getExtractor("cssExtractor");
+			Map<String, String> resultMap = extractor.extractorColumns(html, cssPathList, DbConfig.SPLIT_STRING);
 			String sql = buildSaveSQL(resultMap);
 			boolean result = MysqlUtil.saveToDb(conn, sql);
 			System.out.print("数据保存数据库 ");
@@ -133,12 +134,10 @@ public class TaskTracker extends Thread {
 		detailUrlPath.setPathList(detailPathList);
 		detailUrlPath.setPathIndexList(detailPathIndexList);
 		detailUrlPath.setAttrName("href");
-		
-		
 
 		List<HtmlPath> cssPathList = Arrays.asList(movieTitlePath, detailUrlPath);
 		System.out.println(GsonUtil.toJson(cssPathList));
-		
+
 		TaskTracker taskTracker = new TaskTracker(urlList, cssPathList, "gb2312");
 		taskTracker.run();
 
