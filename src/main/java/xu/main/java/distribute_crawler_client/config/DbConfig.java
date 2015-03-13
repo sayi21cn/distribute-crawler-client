@@ -1,4 +1,4 @@
-package xu.main.java.config;
+package xu.main.java.distribute_crawler_client.config;
 
 public class DbConfig {
 

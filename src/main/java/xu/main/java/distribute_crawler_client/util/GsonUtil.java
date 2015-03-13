@@ -1,4 +1,4 @@
-package xu.main.java.util;
+package xu.main.java.distribute_crawler_client.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

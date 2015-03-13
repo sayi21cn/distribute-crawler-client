@@ -1,4 +1,4 @@
-package xu.main.java.util;
+package xu.main.java.distribute_crawler_client.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -26,8 +26,8 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.log4j.Logger;
 
-import xu.main.java.config.CommonConfig;
-import xu.main.java.config.MailConfig;
+import xu.main.java.distribute_crawler_client.config.CommonConfig;
+import xu.main.java.distribute_crawler_client.config.MailConfig;
 
 /**
  * 

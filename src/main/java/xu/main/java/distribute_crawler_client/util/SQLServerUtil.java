@@ -1,25 +1,23 @@
-package xu.main.java.util;
+package xu.main.java.distribute_crawler_client.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import xu.main.java.config.DbConfig;
+import xu.main.java.distribute_crawler_client.config.DbConfig;
 
-public class MysqlUtil {
-
+public class SQLServerUtil {
 	static {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
+	public static Connection getConnection(String ip,String port) throws SQLException, ClassNotFoundException {
 
-	public static Connection getConnection() throws SQLException, ClassNotFoundException {
-
-		String mysqlUrl = "jdbc:mysql://" + DbConfig.SERVER_IP + ":" + DbConfig.SERVER_PORT + "/" + DbConfig.DB_NAME + "?useUnicode=true&characterEncoding=utf-8";
+		String mysqlUrl = "jdbc:mysql://localhost:3306/" + DbConfig.DB_NAME + "?useUnicode=true&characterEncoding=utf-8";
 		return DriverManager.getConnection(mysqlUrl, DbConfig.DB_USER_NAME, DbConfig.DB_PASS_WORD);
 	}
 
@@ -43,5 +41,4 @@ public class MysqlUtil {
 		}
 		return result;
 	}
-
 }

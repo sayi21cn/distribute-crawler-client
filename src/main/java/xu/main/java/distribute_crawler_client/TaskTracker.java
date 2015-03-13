@@ -1,4 +1,4 @@
-package xu.main.java;
+package xu.main.java.distribute_crawler_client;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -7,13 +7,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import xu.main.java.distribute_crawler_client.extractor.CssExtractor;
+import xu.main.java.distribute_crawler_client.extractor.IExtractor;
+import xu.main.java.distribute_crawler_client.util.GsonUtil;
+import xu.main.java.distribute_crawler_client.util.HttpDownload;
+import xu.main.java.distribute_crawler_client.util.MysqlUtil;
+import xu.main.java.distribute_crawler_client.util.StringHandler;
 import xu.main.java.distribute_crawler_common.vo.HtmlPath;
-import xu.main.java.extractor.CssExtractor;
-import xu.main.java.extractor.IExtractor;
-import xu.main.java.util.GsonUtil;
-import xu.main.java.util.HttpDownload;
-import xu.main.java.util.MysqlUtil;
-import xu.main.java.util.StringHandler;
 
 public class TaskTracker extends Thread {
 

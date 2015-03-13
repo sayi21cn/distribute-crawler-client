@@ -1,4 +1,4 @@
-package xu.main.java.extractor;
+package xu.main.java.distribute_crawler_client.extractor;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,9 +10,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import xu.main.java.config.DbConfig;
+import xu.main.java.distribute_crawler_client.config.DbConfig;
+import xu.main.java.distribute_crawler_client.util.StringHandler;
 import xu.main.java.distribute_crawler_common.vo.HtmlPath;
-import xu.main.java.util.StringHandler;
 
 public class CssExtractor implements IExtractor {
 	

@@ -1,4 +1,4 @@
-package xu.main.java;
+package xu.main.java.distribute_crawler_client;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

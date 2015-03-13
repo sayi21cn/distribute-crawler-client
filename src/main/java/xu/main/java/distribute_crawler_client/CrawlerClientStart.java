@@ -1,4 +1,4 @@
-package xu.main.java;
+package xu.main.java.distribute_crawler_client;
 
 public class CrawlerClientStart {
 	

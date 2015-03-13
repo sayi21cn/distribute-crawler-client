@@ -1,4 +1,4 @@
-package xu.main.java.extractor;
+package xu.main.java.distribute_crawler_client.extractor;
 
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package xu.main.java.util;
+package xu.main.java.distribute_crawler_client.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
-import xu.main.java.config.DbConfig;
+import xu.main.java.distribute_crawler_client.config.DbConfig;
 
 public class DbUtil {
 
