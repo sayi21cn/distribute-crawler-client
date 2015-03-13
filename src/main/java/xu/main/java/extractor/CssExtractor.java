@@ -11,7 +11,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import xu.main.java.config.DbConfig;
-import xu.main.java.model.HtmlPath;
+import xu.main.java.distribute_crawler_common.vo.HtmlPath;
 import xu.main.java.util.StringHandler;
 
 public class CssExtractor implements IExtractor {

@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import xu.main.java.distribute_crawler_common.vo.HtmlPath;
 import xu.main.java.extractor.CssExtractor;
 import xu.main.java.extractor.IExtractor;
-import xu.main.java.model.HtmlPath;
 import xu.main.java.util.GsonUtil;
 import xu.main.java.util.HttpDownload;
 import xu.main.java.util.MysqlUtil;

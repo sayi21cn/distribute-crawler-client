@@ -3,7 +3,7 @@ package xu.main.java;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import xu.main.java.model.CrawlerTask;
+import xu.main.java.distribute_crawler_common.vo.CrawlerTask;
 
 /**
  * 
