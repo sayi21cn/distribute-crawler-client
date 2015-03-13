@@ -5,6 +5,13 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import xu.main.java.model.CrawlerTask;
 
+/**
+ * 
+ * 任务分发，结果收集
+ * @author xu
+ * 
+ */
+
 public class JobTracker {
 	
 	

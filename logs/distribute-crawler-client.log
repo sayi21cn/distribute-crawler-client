@@ -1,0 +1,233 @@
+2015-03-12 23:40:07.295 - [ ERROR ]  邮件发送测试失败！
+javax.mail.AuthenticationFailedException: 550 ÓÃ»§±»Ëø¶¨
+
+	at com.sun.mail.smtp.SMTPTransport$Authenticator.authenticate(SMTPTransport.java:826)
+	at com.sun.mail.smtp.SMTPTransport.authenticate(SMTPTransport.java:761)
+	at com.sun.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:685)
+	at javax.mail.Service.connect(Service.java:317)
+	at javax.mail.Service.connect(Service.java:176)
+	at javax.mail.Service.connect(Service.java:125)
+	at javax.mail.Transport.send0(Transport.java:194)
+	at javax.mail.Transport.send(Transport.java:124)
+	at xu.main.java.util.SendMail.sendHtmlMail(SendMail.java:146)
+	at xu.main.java.util.SendMail.sendHtmlMail(SendMail.java:97)
+	at xu.main.java.SendMailTest.testSendMail(SendMailTest.java:17)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+	at org.junit.runners.BlockJUnit4ClassRunner.runNotIgnored(BlockJUnit4ClassRunner.java:79)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:71)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:49)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
+2015-03-12 23:43:23.775 - [ ERROR ]  邮件发送测试失败！
+javax.mail.AuthenticationFailedException: 535 5.7.8 authentication failed
+
+	at com.sun.mail.smtp.SMTPTransport$Authenticator.authenticate(SMTPTransport.java:826)
+	at com.sun.mail.smtp.SMTPTransport.authenticate(SMTPTransport.java:761)
+	at com.sun.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:685)
+	at javax.mail.Service.connect(Service.java:317)
+	at javax.mail.Service.connect(Service.java:176)
+	at javax.mail.Service.connect(Service.java:125)
+	at javax.mail.Transport.send0(Transport.java:194)
+	at javax.mail.Transport.send(Transport.java:124)
+	at xu.main.java.util.SendMail.sendHtmlMail(SendMail.java:146)
+	at xu.main.java.util.SendMail.sendHtmlMail(SendMail.java:97)
+	at xu.main.java.SendMailTest.testSendMail(SendMailTest.java:17)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:44)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:15)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:41)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:20)
+	at org.junit.runners.BlockJUnit4ClassRunner.runNotIgnored(BlockJUnit4ClassRunner.java:79)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:71)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:49)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:193)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:52)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:191)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:42)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:184)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:236)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:50)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:467)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:683)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:390)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.main(RemoteTestRunner.java:197)
+2015-03-12 23:48:01.701 - [ ERROR ]  邮件发送
+2015-03-13 00:01:26.928 - [ ERROR ]  邮件发送
+2015-03-13 00:10:56.077 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:12:17.860 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:17:30.758 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:18:42.241 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:19:27.150 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:21:23.117 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:22:45.382 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:24:00.232 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:24:53.736 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:26:41.140 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:27:38.145 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:35:04.970 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:35:33.271 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:36:26.718 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:36:58.364 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:37:24.138 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:37:55.875 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:39:36.806 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:14.087 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:14.259 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:14.399 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:14.477 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:14.571 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:14.680 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:14.836 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:14.993 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:15.073 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:15.245 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:15.479 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:15.619 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:15.728 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:15.915 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:16.026 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:16.104 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:16.197 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:16.275 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:16.369 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:16.447 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:16.540 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:16.618 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:16.763 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:16.853 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:16.943 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:17.034 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:17.108 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:17.201 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:17.295 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:17.404 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:17.482 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:17.576 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:17.669 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:17.751 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:17.829 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:17.923 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:18.016 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:18.095 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:18.189 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:18.267 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:18.361 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:18.445 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:18.538 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:18.616 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:18.703 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:18.781 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:18.875 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:19.156 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:40:19.247 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:14.382 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:14.570 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:14.679 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:14.788 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:14.897 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:15.006 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:15.101 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:15.226 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:15.336 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:15.430 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:15.523 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:15.648 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:15.757 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:15.875 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:15.975 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:16.105 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:16.216 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:16.326 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:16.436 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:43:16.556 - [ ERROR ]  log4j邮件测试
+2015-03-13 00:45:24.984 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:26.185 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:26.288 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:26.475 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:26.586 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:26.716 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:27.036 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:27.150 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:27.256 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:27.353 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:27.454 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:27.554 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:27.657 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:27.807 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:27.911 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:28.018 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:28.129 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:29.263 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:32.606 - [ ERROR ]  今天我疯狂！
+2015-03-13 00:45:32.724 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:25.632 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:27.246 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:27.562 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:27.978 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:28.677 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:28.946 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:29.185 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:29.506 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:30.202 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:30.914 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:31.245 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:31.420 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:31.708 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:33.128 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:33.502 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:34.504 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:35.827 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:36.238 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:36.748 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:26:37.108 - [ ERROR ]  今天我疯狂！
+2015-03-13 15:36:12.920 - [ ERROR ]  1、有时候真实比小说更加荒诞，因为虚构是在一定逻辑下进行的，而现实往往毫无逻辑可言。
+2015-03-13 15:36:13.366 - [ ERROR ]  2、如果你经历过真正的孤立无援，你会明白眼泪是最无用的东西，它无法改变既定的事实，无法扭转绝望的困局。它唯一的好处是宣泄压抑的情绪。
+2015-03-13 15:36:13.994 - [ ERROR ]  3、爱对了人固然是运气，若是爱错了，那也叫青春。
+2015-03-13 15:36:14.346 - [ ERROR ]  4、“人总是这样的矛盾，当你去相信时，被骗的遍体鳞伤；当你习惯性的怀疑时，却偏偏有人那么善良，让你觉得对他们的怀疑其实是自己的内心那么肮脏。” 所以，只能选择相信别人时，不忘记有原则的提防。被别人欺骗时，绝不放弃对其他人的善良，这样才不会对这个世界彻底失望。
+2015-03-13 15:36:14.776 - [ ERROR ]  5、自伯之东，首如飞蓬。岂无膏沐，谁适为容。
+2015-03-13 15:36:15.137 - [ ERROR ]  6、做人要含蓄点，得过且过，不必斤斤计较，水清无鱼，人清无徒，谁又不跟谁一辈子，一些事放在心中算了。
+2015-03-13 15:36:15.403 - [ ERROR ]  7、思念这东西，真的很没道理。不是为了缅怀往事而念念不忘，而是真的念念不忘。
+2015-03-13 15:36:15.578 - [ ERROR ]  8、是谁，三千繁华，入你眉心；是谁，青山如墨，素衣白发；是谁，菩提树下，一指清音？是谁温暖了谁的岁月，又是谁惊艳了谁的时光。相思缱绻，为你书写一纸信笺。惟愿，经年离去，落英满地，不再伤怀。
+2015-03-13 15:36:15.936 - [ ERROR ]  9、需要被爱的人才会拼命付出，但被爱的人却总会忘了回报。
+2015-03-13 15:36:17.406 - [ ERROR ]  10、曾经的梦想像错过站的火车，早就不知道去往了哪一站。你还信誓旦旦地以为自己没有长大，结果时间一早就把你甩到了十字路口。
+2015-03-13 15:36:20.814 - [ ERROR ]  11、人不应该是插在花瓶里供人观赏的静物，而是蔓延在草原上随风起舞的韵律。生命不是安排，而是追求，人生的意义也许永远没有答案，但也要尽情感受这种没有答案的人生。
+2015-03-13 15:36:21.570 - [ ERROR ]  12、嫉妒表面上是对别人不满，实际上反映的是对自己不满。意识到自己的不足，才会嫉妒别人。
+2015-03-13 15:36:21.913 - [ ERROR ]  13、好像每个人都清楚地知道别人该怎样生活，但却没有一个人知道自己的生活该怎样，就像释梦的老妇人，不知道如何把梦变为现实。
+2015-03-13 15:36:22.637 - [ ERROR ]  14、有人一路走来顺风顺水，恋爱结婚生子一切看起来毫无波澜，有人生来折腾，二十几岁就尝遍了百种滋味。都对，都好，没有哪个是错的或者是不公平，是你的，你都该把它收起来。
+2015-03-13 15:36:23.494 - [ ERROR ]  15、爱都会有从浓转淡的过程，既然开始了，就要学着去珍惜。
+2015-03-13 15:36:24.144 - [ ERROR ]  16、人追求的当然不是财富，但必要有足以维持尊严的生活，使自己能夠不受阻扰的工作，能夠慷慨，能夠爽朗，能夠独立。
+2015-03-13 15:36:24.581 - [ ERROR ]  17、“不要贸然评价我，你只是知道我的名字，可你不知道我的故事。你只是听闻过我的行为，却不知道我经历过些什么。” ——做好自己已经很难了，何必去八卦别人。
+2015-03-13 15:36:25.277 - [ ERROR ]  18、恋爱如做人，追求爱的态度，也体现人品。爱一个人，他不爱你，那就把这份爱默默藏在心底吧。一厢情愿地头破血流、肝脑涂地，硬要对方知道你的爱、你的苦、你的伟大，说什么我的爱不用你管，这不是爱，是撒野，是骚扰。有时候，人生是要流着泪、咬着牙，学着做一个沉默而高尚的人。
+2015-03-13 15:36:26.996 - [ ERROR ]  19、家庭教育的秘诀：闭上你的嘴，抬起你的腿，走你的人生路，演示给孩子看。所有孩子的模仿力都比奥斯卡影后影帝出色一千倍。
+2015-03-13 15:36:27.353 - [ ERROR ]  20、人生如逆旅，我亦是行人，但愿初相遇，不负有心人。
+2015-03-13 15:38:01.769 - [ ERROR ]  1、有时候真实比小说更加荒诞，因为虚构是在一定逻辑下进行的，而现实往往毫无逻辑可言。
+2015-03-13 15:38:03.383 - [ ERROR ]  2、如果你经历过真正的孤立无援，你会明白眼泪是最无用的东西，它无法改变既定的事实，无法扭转绝望的困局。它唯一的好处是宣泄压抑的情绪。
+2015-03-13 15:38:04.661 - [ ERROR ]  3、爱对了人固然是运气，若是爱错了，那也叫青春。
+2015-03-13 15:38:06.991 - [ ERROR ]  4、“人总是这样的矛盾，当你去相信时，被骗的遍体鳞伤；当你习惯性的怀疑时，却偏偏有人那么善良，让你觉得对他们的怀疑其实是自己的内心那么肮脏。” 所以，只能选择相信别人时，不忘记有原则的提防。被别人欺骗时，绝不放弃对其他人的善良，这样才不会对这个世界彻底失望。
+2015-03-13 15:38:08.318 - [ ERROR ]  5、自伯之东，首如飞蓬。岂无膏沐，谁适为容。
+2015-03-13 15:38:09.717 - [ ERROR ]  6、做人要含蓄点，得过且过，不必斤斤计较，水清无鱼，人清无徒，谁又不跟谁一辈子，一些事放在心中算了。
+2015-03-13 15:38:11.265 - [ ERROR ]  7、思念这东西，真的很没道理。不是为了缅怀往事而念念不忘，而是真的念念不忘。
+2015-03-13 15:38:49.106 - [ ERROR ]  1、有时候真实比小说更加荒诞，因为虚构是在一定逻辑下进行的，而现实往往毫无逻辑可言。
+2015-03-13 15:39:00.123 - [ ERROR ]  2、如果你经历过真正的孤立无援，你会明白眼泪是最无用的东西，它无法改变既定的事实，无法扭转绝望的困局。它唯一的好处是宣泄压抑的情绪。
+2015-03-13 15:39:10.457 - [ ERROR ]  3、爱对了人固然是运气，若是爱错了，那也叫青春。

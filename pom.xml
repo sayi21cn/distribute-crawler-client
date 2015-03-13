@@ -12,9 +12,17 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- mail -->
+		<mail.version>1.4.7</mail.version>
 	</properties>
 
 	<dependencies>
+		<!-- mail -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>${mail.version}</version>
+		</dependency>
 		<!-- Google gson begin -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
