@@ -29,7 +29,7 @@ public class Task {
 	/* 解析模板 */
 	private TemplateContentVO templateContentVO;
 
-	/* 完成进度 0-100 计算方法: alreadyCrawledUrlNum/urlCount 取整 */
+	/* 完成进度 0-100 计算方法: alreadyCrawledUrlNum*100/urlCount 取整 */
 	private int speedProgress = 0;
 
 	private Queue<String> urlQueue = new LinkedBlockingDeque<String>();

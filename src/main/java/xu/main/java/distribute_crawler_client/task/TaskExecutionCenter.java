@@ -29,10 +29,8 @@ public class TaskExecutionCenter extends Thread {
 	private String charset;
 
 	public TaskExecutionCenter(Task task) {
-
 		this.task = task;
 		this.charset = task.getCharset();
-
 	}
 
 	@Override
@@ -41,7 +39,7 @@ public class TaskExecutionCenter extends Thread {
 		String url = null;
 
 		while (null != (url = this.task.pollUrl())) {
-			logger.info("start download url : " + url);
+			logger.info("TaskExecutionCenter: " + Thread.currentThread().getName() + " start download url : " + url);
 			String html = HttpDownload.download(url, charset);
 			IExtractor extractor = ExtractorFactory.getInstance().getExtractor("cssExtractor");
 			Map<String, String> resultMap = extractor.extractorColumns(html, task.getTemplateContentVO().getHtmlPathList(), DbConfig.SPLIT_STRING);
@@ -140,19 +138,18 @@ public class TaskExecutionCenter extends Thread {
 
 		List<HtmlPath> cssPathList = Arrays.asList(movieTitlePath, detailUrlPath);
 		System.out.println(GsonUtil.toJson(cssPathList));
-		
-		
+
 		TemplateContentVO templateContentVO = new TemplateContentVO();
 		templateContentVO.setHtmlPathList(cssPathList);
 		task.setTemplateContentVO(templateContentVO);
-		
-		System.out.println("任务进度 : "+task.getSpeedProgress());
-		
+
+		System.out.println("任务进度 : " + task.getSpeedProgress());
+
 		TaskExecutionCenter taskExecutionCenter = new TaskExecutionCenter(task);
 		taskExecutionCenter.run();
 		System.out.println(task.getResultInsertSqlQueue().size());
 		System.out.println(task.getResultInsertSqlQueue().poll());
-		System.out.println("任务进度 : "+task.getSpeedProgress());
+		System.out.println("任务进度 : " + task.getSpeedProgress());
 
 	}
 }

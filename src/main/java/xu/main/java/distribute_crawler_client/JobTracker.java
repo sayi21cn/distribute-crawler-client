@@ -7,6 +7,7 @@ import java.util.concurrent.LinkedBlockingDeque;
 import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.DbConfig;
+import xu.main.java.distribute_crawler_client.db.DbDao;
 import xu.main.java.distribute_crawler_client.task.Task;
 import xu.main.java.distribute_crawler_common.util.GsonUtil;
 import xu.main.java.distribute_crawler_common.util.StringHandler;
@@ -15,7 +16,7 @@ import xu.main.java.distribute_crawler_common.vo.TemplateContentVO;
 
 /**
  * 
- * 监控中心
+ * 任务分发
  * 
  * @author xu
  * 
@@ -25,7 +26,7 @@ public class JobTracker extends Thread {
 
 	private Logger logger = Logger.getLogger(JobTracker.class);
 
-	private DbTracker dbTracker = new DbTracker();
+	private DbDao dbTracker = new DbDao();
 
 	public Task queryTask() {
 		Task task = new Task();
@@ -45,6 +46,7 @@ public class JobTracker extends Thread {
 
 		task.setTaskId(taskRecord.getId());
 		task.setTaskName(taskRecord.getTask_name());
+		task.setInsertDbTableName(taskRecord.getInsert_db_table_name());
 		task.setThreadNum(StringHandler.string2Int(taskRecord.getDownload_thread_num(), 1));
 
 		Queue<String> urlQueue = this.extractUrls(taskRecord);
@@ -61,15 +63,15 @@ public class JobTracker extends Thread {
 
 	public Queue<String> extractUrls(TaskRecord taskRecord) {
 		Queue<String> queue = new LinkedBlockingDeque<String>();
-		if ("1".equals(taskRecord.getIs_use_db_url())) {
-			String[] urls = taskRecord.getUrls_or_sql().split(DbConfig.SPLIT_STRING);
+		if ("2".equals(taskRecord.getIs_use_db_url())) {
+			String[] urls = taskRecord.getUrls_or_sql().split(DbConfig.URL_SPILT_STRING);
 			int taskStatus = StringHandler.string2Int(taskRecord.getTask_status(), 0);
 			for (int urlIndex = urls.length * taskStatus / 100; urlIndex < urls.length; urlIndex++) {
 				queue.add(urls[urlIndex]);
 			}
 			return queue;
 		}
-		if ("2".equals(taskRecord.getIs_use_db_url())) {
+		if ("1".equals(taskRecord.getIs_use_db_url())) {
 			queryUrlBySql(taskRecord, queue);
 			return queue;
 		}
