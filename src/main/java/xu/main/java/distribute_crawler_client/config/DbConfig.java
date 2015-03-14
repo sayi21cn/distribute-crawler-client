@@ -2,7 +2,7 @@ package xu.main.java.distribute_crawler_client.config;
 
 public class DbConfig {
 
-	public static final String SPLIT_STRING = "###";
+	public static final String SPLIT_STRING = "#####";
 
 	public static final String SERVER_IP = "127.0.0.1";
 

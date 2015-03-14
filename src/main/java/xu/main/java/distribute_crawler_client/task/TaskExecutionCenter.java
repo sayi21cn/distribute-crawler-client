@@ -1,20 +1,20 @@
-package xu.main.java.distribute_crawler_client;
+package xu.main.java.distribute_crawler_client.task;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import xu.main.java.distribute_crawler_client.config.DbConfig;
-import xu.main.java.distribute_crawler_client.util.MysqlUtil;
 import xu.main.java.distribute_crawler_common.extractor.ExtractorFactory;
 import xu.main.java.distribute_crawler_common.extractor.IExtractor;
 import xu.main.java.distribute_crawler_common.util.GsonUtil;
 import xu.main.java.distribute_crawler_common.util.HttpDownload;
 import xu.main.java.distribute_crawler_common.util.StringHandler;
 import xu.main.java.distribute_crawler_common.vo.HtmlPath;
+import xu.main.java.distribute_crawler_common.vo.TemplateContentVO;
 
 /**
  * 任务执行中心
@@ -23,53 +23,46 @@ import xu.main.java.distribute_crawler_common.vo.HtmlPath;
  * 
  */
 public class TaskExecutionCenter extends Thread {
-	private List<String> urlList;
-	private List<HtmlPath> cssPathList;
+
+	private Logger logger = Logger.getLogger(TaskExecutionCenter.class);
+	private Task task;
 	private String charset;
 
-	public TaskExecutionCenter(List<String> urlList, List<HtmlPath> cssPathList, String charset) {
-		this.urlList = urlList;
-		this.cssPathList = cssPathList;
-		this.charset = charset;
+	public TaskExecutionCenter(Task task) {
+
+		this.task = task;
+		this.charset = task.getCharset();
+
 	}
 
 	@Override
 	public void run() {
-		Connection conn = null;
-		try {
-			conn = MysqlUtil.getConnection();
-			System.out.println("db connection done .");
-			Thread.sleep(1000);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		for (String url : urlList) {
-			System.out.println("download: " + url);
-			String html = HttpDownload.download(url, this.charset);
+		String url = null;
+
+		while (null != (url = this.task.pollUrl())) {
+			logger.info("start download url : " + url);
+			String html = HttpDownload.download(url, charset);
 			IExtractor extractor = ExtractorFactory.getInstance().getExtractor("cssExtractor");
-			Map<String, String> resultMap = extractor.extractorColumns(html, cssPathList, DbConfig.SPLIT_STRING);
+			Map<String, String> resultMap = extractor.extractorColumns(html, task.getTemplateContentVO().getHtmlPathList(), DbConfig.SPLIT_STRING);
 			String sql = buildSaveSQL(resultMap);
-			boolean result = MysqlUtil.saveToDb(conn, sql);
-			System.out.print("数据保存数据库 ");
-			System.out.println(result ? "成功" : "失败");
+			task.getResultInsertSqlQueue().offer(sql);
+			// boolean result = MysqlUtil.saveToDb(conn, sql);
+			// System.out.print("数据保存数据库 ");
+			// System.out.println(result ? "成功" : "失败");
 		}
 
 	}
 
 	private String buildSaveSQL(Map<String, String> resultMap) {
-		StringBuffer sqlBuffer = new StringBuffer("insert into dytt_movie_catalog (");
-		for (HtmlPath cssPath : cssPathList) {
+		StringBuffer sqlBuffer = new StringBuffer("insert into ");
+		sqlBuffer.append(task.getInsertDbTableName()).append(" (");
+		for (HtmlPath cssPath : task.getTemplateContentVO().getHtmlPathList()) {
 			sqlBuffer.append(cssPath.getPathName()).append(",");
 		}
 		deleteBufferLast(sqlBuffer, 1);
 		sqlBuffer.append(") values ('");
-		for (HtmlPath cssPath : cssPathList) {
+		for (HtmlPath cssPath : task.getTemplateContentVO().getHtmlPathList()) {
 			sqlBuffer.append(StringHandler.nullToEmpty(resultMap.get(cssPath.getPathName()))).append("','");
 		}
 		deleteBufferLast(sqlBuffer, 2);
@@ -111,6 +104,11 @@ public class TaskExecutionCenter extends Thread {
 		 * answerPath.setPathName("baidu_known_answer");
 		 * answerPath.setDirPath(".best-text");
 		 */
+		Task task = new Task();
+		task.setTaskId(1);
+		task.setCharset("gb2312");
+		task.offerUrl("http://www.ygdy8.net/html/gndy/dyzz/list_23_1.html");
+		task.setInsertDbTableName("dytt_movie_catalog");
 
 		List<String> dirPathList = Arrays.asList(".co_content8 > ul", "table");
 		List<Integer> dirIndexList = Arrays.asList(0, 0);
@@ -142,8 +140,19 @@ public class TaskExecutionCenter extends Thread {
 
 		List<HtmlPath> cssPathList = Arrays.asList(movieTitlePath, detailUrlPath);
 		System.out.println(GsonUtil.toJson(cssPathList));
-
-		TaskExecutionCenter taskExecutionCenter = new TaskExecutionCenter(urlList, cssPathList, "gb2312");
+		
+		
+		TemplateContentVO templateContentVO = new TemplateContentVO();
+		templateContentVO.setHtmlPathList(cssPathList);
+		task.setTemplateContentVO(templateContentVO);
+		
+		System.out.println("任务进度 : "+task.getSpeedProgress());
+		
+		TaskExecutionCenter taskExecutionCenter = new TaskExecutionCenter(task);
 		taskExecutionCenter.run();
+		System.out.println(task.getResultInsertSqlQueue().size());
+		System.out.println(task.getResultInsertSqlQueue().poll());
+		System.out.println("任务进度 : "+task.getSpeedProgress());
+
 	}
 }
