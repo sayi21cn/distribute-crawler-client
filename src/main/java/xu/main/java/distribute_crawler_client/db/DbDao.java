@@ -6,7 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
@@ -26,6 +29,31 @@ public class DbDao {
 	private final String QUERY_TEMPLATE_BY_ID_SQL = "select template_area from template where id = ?;";
 
 	private final String QUERY_ALL_WAIT_TASKRECORDS = "select id,task_name,template_id,insert_db_table_name,is_use_db_url,data_category,urls_or_sql,task_describtion,task_create_date,task_update_time,download_thread_num,task_status from task where task_status = '0' order by id asc";
+
+	private final String UPDATE_TASKRECORDS_STATUS = "update task set task_status = ? where id = ? ;";
+
+	public void taskSpeedFeedback(Map<Integer, Integer> speedMap) {
+		PreparedStatement pstmt = null;
+		try {
+			Connection conn = MysqlUtil.getConnection();
+			pstmt = conn.prepareStatement(UPDATE_TASKRECORDS_STATUS);
+			for (Iterator<Entry<Integer, Integer>> it = speedMap.entrySet().iterator(); it.hasNext();) {
+				Entry<Integer, Integer> entry = it.next();
+				int taskId = entry.getKey();
+				int speed = entry.getValue();
+				pstmt.setString(1, String.valueOf(speed));
+				pstmt.setInt(2, taskId);
+				pstmt.addBatch();
+			}
+			pstmt.executeBatch();
+		} catch (ClassNotFoundException e) {
+			logger.error("Class not found Exception", e);
+		} catch (SQLException e) {
+			logger.error("SQLException", e);
+		} finally {
+			MysqlUtil.closePreparedStatement(pstmt);
+		}
+	}
 
 	public List<TaskRecord> queryAllWaitTaskRecords() {
 		List<TaskRecord> taskRecordList = new ArrayList<TaskRecord>();
@@ -65,10 +93,11 @@ public class DbDao {
 
 	public String queryTemplateById(String templateId) {
 		ResultSet rs = null;
+		PreparedStatement pstmt = null;
 		String templateArea = "{}";
 		try {
 			Connection conn = MysqlUtil.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement(QUERY_TEMPLATE_BY_ID_SQL);
+			pstmt = conn.prepareStatement(QUERY_TEMPLATE_BY_ID_SQL);
 			pstmt.setString(1, templateId);
 			rs = pstmt.executeQuery();
 			rs.next();
@@ -77,16 +106,21 @@ public class DbDao {
 			logger.error("Class not found Exception", e);
 		} catch (SQLException e) {
 			logger.error("SQLException", e);
+		} finally {
+			MysqlUtil.closeResultSet(rs);
+			MysqlUtil.closePreparedStatement(pstmt);
 		}
 		return templateArea;
 	}
 
 	public List<String> queryUrlBySql(String sql) {
 		ResultSet rs = null;
+		Statement stmt = null;
 		List<String> urlList = new ArrayList<String>();
 		try {
 			Connection conn = MysqlUtil.getConnection();
-			rs = conn.createStatement().executeQuery(sql);
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
 			while (rs.next()) {
 				urlList.add(rs.getString("url"));
 			}
@@ -94,6 +128,9 @@ public class DbDao {
 			logger.error("Class not found Exception", e);
 		} catch (SQLException e) {
 			logger.error("SQLException", e);
+		} finally {
+			MysqlUtil.closeResultSet(rs);
+			MysqlUtil.closeStatement(stmt);
 		}
 		return urlList;
 	}

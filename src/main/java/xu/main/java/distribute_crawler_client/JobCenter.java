@@ -75,7 +75,7 @@ public class JobCenter {
 		return true;
 	}
 
-	public static boolean addTaskRecord(TaskRecord taskRecord) {
+	public static boolean addToTaskRecordMap(TaskRecord taskRecord) {
 		if (null != taskRecordMap.get(taskRecord.getId())) {
 			return false;
 		}
@@ -91,7 +91,7 @@ public class JobCenter {
 
 		System.out.println(taskRecord.getTask_status());
 
-		addTaskRecord(taskRecord);
+		addToTaskRecordMap(taskRecord);
 		updateSpeed(1, "30");
 
 		System.out.println(taskRecord.getTask_status());

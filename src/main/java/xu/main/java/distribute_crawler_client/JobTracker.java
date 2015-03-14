@@ -1,6 +1,7 @@
 package xu.main.java.distribute_crawler_client;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -26,7 +27,16 @@ public class JobTracker extends Thread {
 
 	private Logger logger = Logger.getLogger(JobTracker.class);
 
-	private DbDao dbTracker = new DbDao();
+	private DbDao dbDao = new DbDao();
+
+	/**
+	 * 任务进度更新
+	 * 
+	 * @param speedMap<taskId,speed>
+	 */
+	public void taskSpeedFeedback(Map<Integer, Integer> speedMap) {
+		dbDao.taskSpeedFeedback(speedMap);
+	}
 
 	public Task queryTask() {
 		Task task = new Task();
@@ -34,7 +44,7 @@ public class JobTracker extends Thread {
 		if (null == taskRecord) {
 			return task;
 		}
-		
+
 		String templateArea = queryTemplateById(taskRecord.getTemplate_id());
 		try {
 			TemplateContentVO templateContentVO = GsonUtil.fromJson(templateArea, TemplateContentVO.class);
@@ -52,13 +62,13 @@ public class JobTracker extends Thread {
 		Queue<String> urlQueue = this.extractUrls(taskRecord);
 		task.setUrlQueue(urlQueue);
 		task.setUrlCount(urlQueue.size());
-		
-		JobCenter.addTaskRecord(taskRecord);
+
+		JobCenter.addToTaskRecordMap(taskRecord);
 		return task;
 	}
 
 	public String queryTemplateById(String templateId) {
-		return dbTracker.queryTemplateById(templateId);
+		return dbDao.queryTemplateById(templateId);
 	}
 
 	public Queue<String> extractUrls(TaskRecord taskRecord) {
@@ -81,7 +91,7 @@ public class JobTracker extends Thread {
 
 	public void queryUrlBySql(TaskRecord taskRecord, Queue<String> queue) {
 		String sql = taskRecord.getUrls_or_sql();
-		List<String> urlList = dbTracker.queryUrlBySql(sql);
+		List<String> urlList = dbDao.queryUrlBySql(sql);
 		if (urlList.size() == 0) {
 			return;
 		}

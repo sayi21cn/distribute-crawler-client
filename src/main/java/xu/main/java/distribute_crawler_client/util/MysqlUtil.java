@@ -2,6 +2,7 @@ package xu.main.java.distribute_crawler_client.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -59,6 +60,16 @@ public class MysqlUtil {
 		if (rs != null) {
 			try {
 				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void closePreparedStatement(PreparedStatement pstmt) {
+		if (pstmt != null) {
+			try {
+				pstmt.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
