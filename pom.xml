@@ -4,7 +4,7 @@
 
 	<groupId>xu.main.java</groupId>
 	<artifactId>distribute-crawler-client</artifactId>
-	<version>1.0</version>
+	<version>1.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>distribute-crawler-client</name>
@@ -14,7 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- mail -->
 		<mail.version>1.4.7</mail.version>
-		<crawler-common.version>1.0</crawler-common.version>
+		<crawler-common.version>1.1-SNAPSHOT</crawler-common.version>
 	</properties>
 
 	<dependencies>
