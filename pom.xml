@@ -4,17 +4,17 @@
 
 	<groupId>xu.main.java</groupId>
 	<artifactId>distribute-crawler-client</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>movie-crawler-client</name>
+	<name>distribute-crawler-client</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- mail -->
 		<mail.version>1.4.7</mail.version>
-		<crawler-common.version>1.0-SNAPSHOT</crawler-common.version>
+		<crawler-common.version>1.0</crawler-common.version>
 	</properties>
 
 	<dependencies>
