@@ -44,7 +44,7 @@ public class TaskExecutionCenter extends Thread {
 			IExtractor extractor = ExtractorFactory.getInstance().getExtractor("cssExtractor");
 			Map<String, String> resultMap = extractor.extractorColumns(html, task.getTemplateContentVO().getHtmlPathList(), DbConfig.SPLIT_STRING);
 			String sql = buildSaveSQL(resultMap);
-			task.getResultInsertSqlQueue().offer(sql);
+			task.offerInsertSql(sql);
 			// boolean result = MysqlUtil.saveToDb(conn, sql);
 			// System.out.print("数据保存数据库 ");
 			// System.out.println(result ? "成功" : "失败");
@@ -65,7 +65,6 @@ public class TaskExecutionCenter extends Thread {
 		}
 		deleteBufferLast(sqlBuffer, 2);
 		sqlBuffer.append(");");
-		System.out.println(sqlBuffer);
 		return sqlBuffer.toString();
 	}
 
@@ -147,8 +146,6 @@ public class TaskExecutionCenter extends Thread {
 
 		TaskExecutionCenter taskExecutionCenter = new TaskExecutionCenter(task);
 		taskExecutionCenter.run();
-		System.out.println(task.getResultInsertSqlQueue().size());
-		System.out.println(task.getResultInsertSqlQueue().poll());
 		System.out.println("任务进度 : " + task.getSpeedProgress());
 
 	}

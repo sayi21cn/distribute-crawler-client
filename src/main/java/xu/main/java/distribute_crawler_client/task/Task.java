@@ -7,6 +7,7 @@ import xu.main.java.distribute_crawler_common.vo.TemplateContentVO;
 
 /**
  * 任务实体
+ * 
  * @author xu
  * 
  */
@@ -35,6 +36,14 @@ public class Task {
 	private Queue<String> urlQueue = new LinkedBlockingDeque<String>();
 
 	private Queue<String> resultInsertSqlQueue = new LinkedBlockingDeque<String>();
+
+	public boolean offerInsertSql(String sql){
+		return resultInsertSqlQueue.offer(sql);
+	}
+	
+	public String pollInsertSql() {
+		return resultInsertSqlQueue.poll();
+	}
 
 	// offer 添加一个元素并返回true 如果队列已满，则返回false
 	public boolean offerUrl(String url) {
@@ -123,10 +132,6 @@ public class Task {
 
 	public void setSpeedProgress(int speedProgress) {
 		this.speedProgress = speedProgress;
-	}
-
-	public Queue<String> getResultInsertSqlQueue() {
-		return resultInsertSqlQueue;
 	}
 
 	public void setResultInsertSqlQueue(Queue<String> resultInsertSqlQueue) {

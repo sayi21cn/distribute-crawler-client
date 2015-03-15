@@ -1,7 +1,9 @@
 package xu.main.java.distribute_crawler_client.task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -30,7 +32,7 @@ public class TaskSpeedFeedback extends Thread {
 		logger.info("TaskSpeedFeedback: start !");
 		while (true) {
 
-			Map<Integer, Integer> speedMap = queryTaskSpeed();
+			Map<Integer, TaskFeedbackVO> speedMap = queryTaskSpeed();
 
 			jobTracker.taskSpeedFeedback(speedMap);
 
@@ -43,13 +45,20 @@ public class TaskSpeedFeedback extends Thread {
 		}
 	}
 
-	public Map<Integer, Integer> queryTaskSpeed() {
+	public Map<Integer, TaskFeedbackVO> queryTaskSpeed() {
 		synchronized (TASK_MAP) {
-			Map<Integer, Integer> speedMap = new HashMap<Integer, Integer>();
+			Map<Integer, TaskFeedbackVO> speedMap = new HashMap<Integer, TaskFeedbackVO>();
 			for (Iterator<Entry<Integer, Task>> it = TASK_MAP.entrySet().iterator(); it.hasNext();) {
 				Entry<Integer, Task> entry = it.next();
 				Task task = entry.getValue();
-				speedMap.put(entry.getKey(), task.getSpeedProgress());
+				TaskFeedbackVO taskFeedbackVO = new TaskFeedbackVO();
+				taskFeedbackVO.setTaskId(task.getTaskId());
+				taskFeedbackVO.setTaskName(task.getTaskName());
+				taskFeedbackVO.setSpeedProgress(task.getSpeedProgress());
+
+				List<String> insertSqlList = extractInsertSqls(task);
+				taskFeedbackVO.setInsertSqlList(insertSqlList);
+				speedMap.put(entry.getKey(), taskFeedbackVO);
 				if (task.getSpeedProgress() == 100) {
 					TASK_MAP.remove(task.getTaskId());
 				}
@@ -58,4 +67,12 @@ public class TaskSpeedFeedback extends Thread {
 		}
 	}
 
+	private List<String> extractInsertSqls(Task task) {
+		String sql = null;
+		List<String> insertSqlList = new ArrayList<String>();
+		while ((sql = task.pollInsertSql()) != null) {
+			insertSqlList.add(sql);
+		}
+		return insertSqlList;
+	}
 }

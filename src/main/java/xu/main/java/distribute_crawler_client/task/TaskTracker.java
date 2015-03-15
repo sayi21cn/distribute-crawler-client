@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.TaskTrackerConfig;
-import xu.main.java.distribute_crawler_common.util.GsonUtil;
 import xu.main.java.distribute_crawler_common.vo.HtmlPath;
 
 /**
@@ -80,8 +79,7 @@ public class TaskTracker extends Thread {
 		detailUrlPath.setPathIndexList(detailPathIndexList);
 		detailUrlPath.setAttrName("href");
 
-		List<HtmlPath> cssPathList = Arrays.asList(movieTitlePath, detailUrlPath);
-		System.out.println(GsonUtil.toJson(cssPathList));
+	//	List<HtmlPath> cssPathList = Arrays.asList(movieTitlePath, detailUrlPath);
 	}
 
 }

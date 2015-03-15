@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
+import xu.main.java.distribute_crawler_client.task.TaskFeedbackVO;
 import xu.main.java.distribute_crawler_client.util.MysqlUtil;
 import xu.main.java.distribute_crawler_common.vo.TaskRecord;
 
@@ -32,16 +33,40 @@ public class DbDao {
 
 	private final String UPDATE_TASKRECORDS_STATUS = "update task set task_status = ? where id = ? ;";
 
-	public void taskSpeedFeedback(Map<Integer, Integer> speedMap) {
+	public void resultInsertToDb(Map<Integer, TaskFeedbackVO> speedMap){
+		Statement stmt = null;
+		try {
+			Connection conn = MysqlUtil.getConnection();
+			stmt = conn.createStatement();
+			for (Iterator<Entry<Integer, TaskFeedbackVO>> it = speedMap.entrySet().iterator(); it.hasNext();) {
+				Entry<Integer, TaskFeedbackVO> entry = it.next();
+				TaskFeedbackVO taskFeedbackVO = entry.getValue();
+				List<String> sqlList = taskFeedbackVO.getInsertSqlList();
+				for(int sqlIndex=0,len=sqlList.size();sqlIndex<len;sqlIndex++){
+					stmt.addBatch(sqlList.get(sqlIndex));
+				}
+				stmt.executeBatch();
+			}
+			stmt.executeBatch();
+		} catch (ClassNotFoundException e) {
+			logger.error("Class not found Exception", e);
+		} catch (SQLException e) {
+			logger.error("SQLException", e);
+		} finally {
+			MysqlUtil.closeStatement(stmt);
+		}
+	}
+	
+	public void taskSpeedFeedback(Map<Integer, TaskFeedbackVO> speedMap) {
 		PreparedStatement pstmt = null;
 		try {
 			Connection conn = MysqlUtil.getConnection();
 			pstmt = conn.prepareStatement(UPDATE_TASKRECORDS_STATUS);
-			for (Iterator<Entry<Integer, Integer>> it = speedMap.entrySet().iterator(); it.hasNext();) {
-				Entry<Integer, Integer> entry = it.next();
+			for (Iterator<Entry<Integer, TaskFeedbackVO>> it = speedMap.entrySet().iterator(); it.hasNext();) {
+				Entry<Integer, TaskFeedbackVO> entry = it.next();
 				int taskId = entry.getKey();
-				int speed = entry.getValue();
-				pstmt.setString(1, String.valueOf(speed));
+				TaskFeedbackVO taskFeedbackVO = entry.getValue();
+				pstmt.setString(1, String.valueOf(taskFeedbackVO.getSpeedProgress()));
 				pstmt.setInt(2, taskId);
 				pstmt.addBatch();
 			}

@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import xu.main.java.distribute_crawler_client.config.DbConfig;
 import xu.main.java.distribute_crawler_client.db.DbDao;
 import xu.main.java.distribute_crawler_client.task.Task;
+import xu.main.java.distribute_crawler_client.task.TaskFeedbackVO;
 import xu.main.java.distribute_crawler_common.util.GsonUtil;
 import xu.main.java.distribute_crawler_common.util.StringHandler;
 import xu.main.java.distribute_crawler_common.vo.TaskRecord;
@@ -32,10 +33,12 @@ public class JobTracker extends Thread {
 	/**
 	 * 任务进度更新
 	 * 
-	 * @param speedMap<taskId,speed>
+	 * @param speedMap
+	 *            <taskId,speed>
 	 */
-	public void taskSpeedFeedback(Map<Integer, Integer> speedMap) {
+	public void taskSpeedFeedback(Map<Integer, TaskFeedbackVO> speedMap) {
 		dbDao.taskSpeedFeedback(speedMap);
+		dbDao.resultInsertToDb(speedMap);
 	}
 
 	public Task queryTask() {
