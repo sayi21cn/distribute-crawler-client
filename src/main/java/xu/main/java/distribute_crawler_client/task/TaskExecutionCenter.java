@@ -7,13 +7,14 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import xu.main.java.distribute_crawler_client.config.DbConfig;
+import xu.main.java.distribute_crawler_client.config.ServerDbConfig;
 import xu.main.java.distribute_crawler_common.extractor.ExtractorFactory;
 import xu.main.java.distribute_crawler_common.extractor.IExtractor;
 import xu.main.java.distribute_crawler_common.util.GsonUtil;
 import xu.main.java.distribute_crawler_common.util.HttpDownload;
 import xu.main.java.distribute_crawler_common.util.StringHandler;
 import xu.main.java.distribute_crawler_common.vo.HtmlPath;
+import xu.main.java.distribute_crawler_common.vo.TaskVO;
 import xu.main.java.distribute_crawler_common.vo.TemplateContentVO;
 
 /**
@@ -25,12 +26,12 @@ import xu.main.java.distribute_crawler_common.vo.TemplateContentVO;
 public class TaskExecutionCenter extends Thread {
 
 	private Logger logger = Logger.getLogger(TaskExecutionCenter.class);
-	private Task task;
+	private TaskVO taskVO;
 	private String charset;
 
-	public TaskExecutionCenter(Task task) {
-		this.task = task;
-		this.charset = task.getCharset();
+	public TaskExecutionCenter(TaskVO taskVO) {
+		this.taskVO = taskVO;
+		this.charset = taskVO.getCharset();
 	}
 
 	@Override
@@ -38,13 +39,13 @@ public class TaskExecutionCenter extends Thread {
 
 		String url = null;
 
-		while (null != (url = this.task.pollUrl())) {
+		while (null != (url = this.taskVO.pollUrl())) {
 			logger.info("TaskExecutionCenter: " + Thread.currentThread().getName() + " start download url : " + url);
 			String html = HttpDownload.download(url, charset);
 			IExtractor extractor = ExtractorFactory.getInstance().getExtractor("cssExtractor");
-			Map<String, String> resultMap = extractor.extractorColumns(html, task.getTemplateContentVO().getHtmlPathList(), DbConfig.SPLIT_STRING);
+			Map<String, String> resultMap = extractor.extractorColumns(html, taskVO.getTemplateContentVO().getHtmlPathList(), ServerDbConfig.SPLIT_STRING);
 			String sql = buildSaveSQL(resultMap);
-			task.offerInsertSql(sql);
+			taskVO.offerInsertSql(sql);
 			// boolean result = MysqlUtil.saveToDb(conn, sql);
 			// System.out.print("数据保存数据库 ");
 			// System.out.println(result ? "成功" : "失败");
@@ -54,13 +55,13 @@ public class TaskExecutionCenter extends Thread {
 
 	private String buildSaveSQL(Map<String, String> resultMap) {
 		StringBuffer sqlBuffer = new StringBuffer("insert into ");
-		sqlBuffer.append(task.getInsertDbTableName()).append(" (");
-		for (HtmlPath cssPath : task.getTemplateContentVO().getHtmlPathList()) {
+		sqlBuffer.append(taskVO.getInsertDbTableName()).append(" (");
+		for (HtmlPath cssPath : taskVO.getTemplateContentVO().getHtmlPathList()) {
 			sqlBuffer.append(cssPath.getPathName()).append(",");
 		}
 		deleteBufferLast(sqlBuffer, 1);
 		sqlBuffer.append(") values ('");
-		for (HtmlPath cssPath : task.getTemplateContentVO().getHtmlPathList()) {
+		for (HtmlPath cssPath : taskVO.getTemplateContentVO().getHtmlPathList()) {
 			sqlBuffer.append(StringHandler.nullToEmpty(resultMap.get(cssPath.getPathName()))).append("','");
 		}
 		deleteBufferLast(sqlBuffer, 2);
@@ -101,7 +102,7 @@ public class TaskExecutionCenter extends Thread {
 		 * answerPath.setPathName("baidu_known_answer");
 		 * answerPath.setDirPath(".best-text");
 		 */
-		Task task = new Task();
+		TaskVO task = new TaskVO();
 		task.setTaskId(1);
 		task.setCharset("gb2312");
 		task.offerUrl("http://www.ygdy8.net/html/gndy/dyzz/list_23_1.html");

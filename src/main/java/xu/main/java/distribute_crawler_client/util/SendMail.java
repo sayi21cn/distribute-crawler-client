@@ -26,7 +26,7 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.log4j.Logger;
 
-import xu.main.java.distribute_crawler_client.config.CommonConfig;
+import xu.main.java.distribute_crawler_client.config.ClientCommonConfig;
 import xu.main.java.distribute_crawler_client.config.MailConfig;
 import xu.main.java.distribute_crawler_common.util.StringHandler;
 
@@ -41,7 +41,7 @@ public class SendMail {
 	private static String password = "";
 	private static String smtpServer = "";
 	private static String fromMailAddress = "";
-	private static String version = CommonConfig.VERSION;
+	private static String version = ClientCommonConfig.VERSION;
 	private static String mailNeck = "mail";
 	private static InternetAddress[] toMailAddress = new InternetAddress[1];
 

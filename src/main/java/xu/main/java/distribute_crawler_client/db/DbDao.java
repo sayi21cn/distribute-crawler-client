@@ -13,8 +13,8 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
-import xu.main.java.distribute_crawler_client.task.TaskFeedbackVO;
 import xu.main.java.distribute_crawler_client.util.MysqlUtil;
+import xu.main.java.distribute_crawler_common.vo.TaskFeedbackVO;
 import xu.main.java.distribute_crawler_common.vo.TaskRecord;
 
 /**

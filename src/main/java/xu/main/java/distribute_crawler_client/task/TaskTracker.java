@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.TaskTrackerConfig;
 import xu.main.java.distribute_crawler_common.vo.HtmlPath;
+import xu.main.java.distribute_crawler_common.vo.TaskVO;
 
 /**
  * 任务创建中心
@@ -24,10 +25,10 @@ public class TaskTracker extends Thread {
 	public void run() {
 		while (true) {
 			logger.info("TaskTracker: begin queryTask");
-			Task task = taskQuery.queryTask();
+			TaskVO taskVO = taskQuery.queryTask();
 
 			// 无任务
-			if (task.getTaskId() == 0) {
+			if (taskVO.getTaskId() == 0) {
 				try {
 					logger.info("TaskTracker: no task and sleep " + TaskTrackerConfig.QUERY_TASK_INTERVAL + "ms");
 					Thread.sleep(TaskTrackerConfig.QUERY_TASK_INTERVAL);
@@ -36,12 +37,12 @@ public class TaskTracker extends Thread {
 				}
 				continue;
 			}
-			logger.info(String.format("TaskTracker: query a task,id:[%s],task_name:[%s],thread_num:[%s]", task.getTaskId(), task.getTaskName(), task.getThreadNum()));
+			logger.info(String.format("TaskTracker: query a task,id:[%s],task_name:[%s],thread_num:[%s]", taskVO.getTaskId(), taskVO.getTaskName(), taskVO.getThreadNum()));
 
-			int threadNum = task.getThreadNum();
+			int threadNum = taskVO.getThreadNum();
 
 			for (int threadIndex = 0; threadIndex < threadNum; threadIndex++) {
-				TaskExecutionCenter taskExecutionCenter = new TaskExecutionCenter(task);
+				TaskExecutionCenter taskExecutionCenter = new TaskExecutionCenter(taskVO);
 				taskExecutionCenter.setName("TaskExecutionCenter_thread_"+threadIndex);
 				taskExecutionCenter.start();
 				logger.info("TaskTracker: TaskExecutionCenter_thread_"+threadIndex+" started");
@@ -50,7 +51,7 @@ public class TaskTracker extends Thread {
 	}
 
 	public static void main(String[] args) {
-		Task task = new Task();
+		TaskVO task = new TaskVO();
 		task.setTaskId(1);
 		task.setCharset("gb2312");
 		task.offerUrl("http://www.ygdy8.net/html/gndy/dyzz/list_23_1.html");

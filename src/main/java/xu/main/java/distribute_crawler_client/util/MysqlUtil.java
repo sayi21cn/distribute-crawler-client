@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import xu.main.java.distribute_crawler_client.config.DbConfig;
+import xu.main.java.distribute_crawler_client.config.ServerDbConfig;
 
 public class MysqlUtil {
 
@@ -21,8 +21,8 @@ public class MysqlUtil {
 
 	public static Connection getConnection() throws SQLException, ClassNotFoundException {
 
-		String mysqlUrl = "jdbc:mysql://" + DbConfig.SERVER_IP + ":" + DbConfig.SERVER_PORT + "/" + DbConfig.DB_NAME + "?useUnicode=true&characterEncoding=utf-8";
-		return DriverManager.getConnection(mysqlUrl, DbConfig.DB_USER_NAME, DbConfig.DB_PASS_WORD);
+		String mysqlUrl = "jdbc:mysql://" + ServerDbConfig.SERVER_IP + ":" + ServerDbConfig.SERVER_PORT + "/" + ServerDbConfig.DB_NAME + "?useUnicode=true&characterEncoding=utf-8";
+		return DriverManager.getConnection(mysqlUrl, ServerDbConfig.DB_USER_NAME, ServerDbConfig.DB_PASS_WORD);
 	}
 
 	public static boolean saveToDb(Connection conn, String sql) {

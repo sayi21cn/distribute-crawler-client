@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.JobTracker;
 import xu.main.java.distribute_crawler_client.config.TaskTrackerConfig;
+import xu.main.java.distribute_crawler_common.vo.TaskFeedbackVO;
+import xu.main.java.distribute_crawler_common.vo.TaskVO;
 
 /**
  * 
@@ -23,7 +25,7 @@ public class TaskSpeedFeedback extends Thread {
 
 	private Logger logger = Logger.getLogger(TaskSpeedFeedback.class);
 
-	public static final Map<Integer, Task> TASK_MAP = new HashMap<Integer, Task>();
+	public static final Map<Integer, TaskVO> TASK_MAP = new HashMap<Integer, TaskVO>();
 
 	private JobTracker jobTracker = new JobTracker();
 
@@ -48,9 +50,9 @@ public class TaskSpeedFeedback extends Thread {
 	public Map<Integer, TaskFeedbackVO> queryTaskSpeed() {
 		synchronized (TASK_MAP) {
 			Map<Integer, TaskFeedbackVO> speedMap = new HashMap<Integer, TaskFeedbackVO>();
-			for (Iterator<Entry<Integer, Task>> it = TASK_MAP.entrySet().iterator(); it.hasNext();) {
-				Entry<Integer, Task> entry = it.next();
-				Task task = entry.getValue();
+			for (Iterator<Entry<Integer, TaskVO>> it = TASK_MAP.entrySet().iterator(); it.hasNext();) {
+				Entry<Integer, TaskVO> entry = it.next();
+				TaskVO task = entry.getValue();
 				TaskFeedbackVO taskFeedbackVO = new TaskFeedbackVO();
 				taskFeedbackVO.setTaskId(task.getTaskId());
 				taskFeedbackVO.setTaskName(task.getTaskName());
@@ -67,7 +69,7 @@ public class TaskSpeedFeedback extends Thread {
 		}
 	}
 
-	private List<String> extractInsertSqls(Task task) {
+	private List<String> extractInsertSqls(TaskVO task) {
 		String sql = null;
 		List<String> insertSqlList = new ArrayList<String>();
 		while ((sql = task.pollInsertSql()) != null) {

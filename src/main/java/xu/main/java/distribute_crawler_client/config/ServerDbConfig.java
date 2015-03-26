@@ -1,6 +1,6 @@
 package xu.main.java.distribute_crawler_client.config;
 
-public class DbConfig {
+public class ServerDbConfig {
 
 	/* 查询任务数据库间隔时间 毫秒 */
 	public static final int DB_TRACKER_QUERY_INTERVAL = 1000 * 60;

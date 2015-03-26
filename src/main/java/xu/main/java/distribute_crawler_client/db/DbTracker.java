@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.JobCenter;
-import xu.main.java.distribute_crawler_client.config.DbConfig;
+import xu.main.java.distribute_crawler_client.config.ServerDbConfig;
 import xu.main.java.distribute_crawler_common.vo.TaskRecord;
 
 public class DbTracker extends Thread {
@@ -32,7 +32,7 @@ public class DbTracker extends Thread {
 			}
 
 			try {
-				Thread.sleep(DbConfig.DB_TRACKER_QUERY_INTERVAL);
+				Thread.sleep(ServerDbConfig.DB_TRACKER_QUERY_INTERVAL);
 			} catch (InterruptedException e) {
 				logger.error("DbTracker sleep error ! ", e);
 			}
