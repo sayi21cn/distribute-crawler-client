@@ -7,13 +7,13 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 import org.apache.log4j.Logger;
 
-import xu.main.java.distribute_crawler_client.config.DbConfig;
+import xu.main.java.distribute_crawler_client.config.ServerDbConfig;
 import xu.main.java.distribute_crawler_client.db.DbDao;
-import xu.main.java.distribute_crawler_client.task.Task;
-import xu.main.java.distribute_crawler_client.task.TaskFeedbackVO;
 import xu.main.java.distribute_crawler_common.util.GsonUtil;
 import xu.main.java.distribute_crawler_common.util.StringHandler;
+import xu.main.java.distribute_crawler_common.vo.TaskFeedbackVO;
 import xu.main.java.distribute_crawler_common.vo.TaskRecord;
+import xu.main.java.distribute_crawler_common.vo.TaskVO;
 import xu.main.java.distribute_crawler_common.vo.TemplateContentVO;
 
 /**
@@ -41,8 +41,8 @@ public class JobTracker extends Thread {
 		dbDao.resultInsertToDb(speedMap);
 	}
 
-	public Task queryTask() {
-		Task task = new Task();
+	public TaskVO queryTask() {
+		TaskVO task = new TaskVO();
 		TaskRecord taskRecord = JobCenter.pollWaitTaskRecord();
 		if (null == taskRecord) {
 			return task;
@@ -77,7 +77,7 @@ public class JobTracker extends Thread {
 	public Queue<String> extractUrls(TaskRecord taskRecord) {
 		Queue<String> queue = new LinkedBlockingDeque<String>();
 		if ("2".equals(taskRecord.getIs_use_db_url())) {
-			String[] urls = taskRecord.getUrls_or_sql().split(DbConfig.URL_SPILT_STRING);
+			String[] urls = taskRecord.getUrls_or_sql().split(ServerDbConfig.URL_SPILT_STRING);
 			int taskStatus = StringHandler.string2Int(taskRecord.getTask_status(), 0);
 			for (int urlIndex = urls.length * taskStatus / 100; urlIndex < urls.length; urlIndex++) {
 				queue.add(urls[urlIndex]);

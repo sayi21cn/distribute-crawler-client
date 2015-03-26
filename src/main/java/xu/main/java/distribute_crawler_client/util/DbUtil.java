@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
-import xu.main.java.distribute_crawler_client.config.DbConfig;
+import xu.main.java.distribute_crawler_client.config.ServerDbConfig;
 
 public class DbUtil {
 
@@ -27,7 +27,7 @@ public class DbUtil {
 	public static Connection getConnection() {
 		try {
 			if (conn == null || conn.isClosed()) {
-				conn = DriverManager.getConnection(DbConfig.DB_URL, DbConfig.DB_USER_NAME, DbConfig.DB_PASS_WORD);
+				conn = DriverManager.getConnection(ServerDbConfig.DB_URL, ServerDbConfig.DB_USER_NAME, ServerDbConfig.DB_PASS_WORD);
 			}
 		} catch (SQLException e) {
 			logger.error("", e);
