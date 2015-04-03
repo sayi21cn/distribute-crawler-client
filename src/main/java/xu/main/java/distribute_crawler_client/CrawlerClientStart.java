@@ -1,10 +1,6 @@
 package xu.main.java.distribute_crawler_client;
 
-import org.apache.log4j.PropertyConfigurator;
-
-import xu.main.java.distribute_crawler_client.db.DbTracker;
-import xu.main.java.distribute_crawler_client.task.TaskSpeedFeedback;
-import xu.main.java.distribute_crawler_client.task.TaskTracker;
+import xu.main.java.distribute_crawler_client.nio.TaskQueryNioClient;
 
 public class CrawlerClientStart {
 
@@ -12,22 +8,20 @@ public class CrawlerClientStart {
 	// F:/github/distribute-crawler/distribute-crawler-client/target/test-classes/
 
 	public static void main(String[] args) {
-		
-		PropertyConfigurator.configure("etc/log4j.properties");
 
-		// 数据库线程启动
-		DbTracker dbTracker = new DbTracker();
-		dbTracker.start();
+		// PropertyConfigurator.configure("etc/log4j.properties");
 
-		// JobTracker线程启动
+		// Task Query client NIO 线程启动
+		TaskQueryNioClient tqClient = new TaskQueryNioClient();
+		tqClient.start();
 
 		// TaskTracker线程启动
-		TaskTracker taskTracker = new TaskTracker();
-		taskTracker.start();
+		// TaskTracker taskTracker = new TaskTracker();
+		// taskTracker.start();
 
-		// 任务进度反馈线程启动
-		TaskSpeedFeedback taskSpeedFeedback = new TaskSpeedFeedback();
-		taskSpeedFeedback.start();
+		// // 任务进度反馈线程启动
+		// TaskSpeedFeedback taskSpeedFeedback = new TaskSpeedFeedback();
+		// taskSpeedFeedback.start();
 
 	}
 

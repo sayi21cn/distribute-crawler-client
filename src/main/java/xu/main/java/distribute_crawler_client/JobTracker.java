@@ -9,11 +9,11 @@ import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.ServerDbConfig;
 import xu.main.java.distribute_crawler_client.db.DbDao;
+import xu.main.java.distribute_crawler_common.nio_data.TaskVO;
 import xu.main.java.distribute_crawler_common.util.GsonUtil;
 import xu.main.java.distribute_crawler_common.util.StringHandler;
 import xu.main.java.distribute_crawler_common.vo.TaskFeedbackVO;
 import xu.main.java.distribute_crawler_common.vo.TaskRecord;
-import xu.main.java.distribute_crawler_common.vo.TaskVO;
 import xu.main.java.distribute_crawler_common.vo.TemplateContentVO;
 
 /**
@@ -42,32 +42,32 @@ public class JobTracker extends Thread {
 	}
 
 	public TaskVO queryTask() {
-		TaskVO task = new TaskVO();
+		TaskVO taskVO = new TaskVO();
 		TaskRecord taskRecord = JobCenter.pollWaitTaskRecord();
 		if (null == taskRecord) {
-			return task;
+			return taskVO;
 		}
 
 		String templateArea = queryTemplateById(taskRecord.getTemplate_id());
 		try {
 			TemplateContentVO templateContentVO = GsonUtil.fromJson(templateArea, TemplateContentVO.class);
-			task.setTemplateContentVO(templateContentVO);
+			taskVO.setTemplateContentVO(templateContentVO);
 		} catch (Exception e) {
 			logger.error("Content Extractor model extracted error!", e);
-			return task;
+			return taskVO;
 		}
 
-		task.setTaskId(taskRecord.getId());
-		task.setTaskName(taskRecord.getTask_name());
-		task.setInsertDbTableName(taskRecord.getInsert_db_table_name());
-		task.setThreadNum(StringHandler.string2Int(taskRecord.getDownload_thread_num(), 1));
+		taskVO.setTaskId(taskRecord.getId());
+		taskVO.setTaskName(taskRecord.getTask_name());
+		taskVO.setInsertDbTableName(taskRecord.getInsert_db_table_name());
+		taskVO.setThreadNum(StringHandler.string2Int(taskRecord.getDownload_thread_num(), 1));
 
 		Queue<String> urlQueue = this.extractUrls(taskRecord);
-		task.setUrlQueue(urlQueue);
-		task.setUrlCount(urlQueue.size());
+		taskVO.setUrlQueue(urlQueue);
+		taskVO.setUrlCount(urlQueue.size());
 
 		JobCenter.addToTaskRecordMap(taskRecord);
-		return task;
+		return taskVO;
 	}
 
 	public String queryTemplateById(String templateId) {

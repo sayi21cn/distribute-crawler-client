@@ -2,18 +2,14 @@ package xu.main.java.distribute_crawler_client.task;
 
 import org.apache.log4j.Logger;
 
-import xu.main.java.distribute_crawler_client.JobTracker;
-import xu.main.java.distribute_crawler_common.vo.TaskVO;
+import xu.main.java.distribute_crawler_common.nio_data.TaskVO;
 
 public class TaskQuery {
 
 	private Logger logger = Logger.getLogger(TaskQuery.class);
 
-	private JobTracker jobTracker = new JobTracker();
-
-	
 	public TaskVO queryTask() {
-		TaskVO taskVO = jobTracker.queryTask();
+		TaskVO taskVO = TaskCenter.pollTaskFromWaitQueue();
 		if (taskVO.getTaskId() == 0) {
 			return taskVO;
 		}

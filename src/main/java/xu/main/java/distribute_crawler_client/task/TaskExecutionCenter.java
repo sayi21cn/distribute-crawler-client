@@ -10,11 +10,11 @@ import org.apache.log4j.Logger;
 import xu.main.java.distribute_crawler_client.config.ServerDbConfig;
 import xu.main.java.distribute_crawler_common.extractor.ExtractorFactory;
 import xu.main.java.distribute_crawler_common.extractor.IExtractor;
+import xu.main.java.distribute_crawler_common.nio_data.TaskVO;
 import xu.main.java.distribute_crawler_common.util.GsonUtil;
 import xu.main.java.distribute_crawler_common.util.HttpDownload;
 import xu.main.java.distribute_crawler_common.util.StringHandler;
 import xu.main.java.distribute_crawler_common.vo.HtmlPath;
-import xu.main.java.distribute_crawler_common.vo.TaskVO;
 import xu.main.java.distribute_crawler_common.vo.TemplateContentVO;
 
 /**

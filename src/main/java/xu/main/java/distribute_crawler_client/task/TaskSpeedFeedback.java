@@ -11,8 +11,8 @@ import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.JobTracker;
 import xu.main.java.distribute_crawler_client.config.TaskTrackerConfig;
+import xu.main.java.distribute_crawler_common.nio_data.TaskVO;
 import xu.main.java.distribute_crawler_common.vo.TaskFeedbackVO;
-import xu.main.java.distribute_crawler_common.vo.TaskVO;
 
 /**
  * 
