@@ -8,6 +8,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 
+import org.apache.log4j.Logger;
+
 import xu.main.java.distribute_crawler_client.config.NioClientConfig;
 import xu.main.java.distribute_crawler_client.task.TaskCenter;
 import xu.main.java.distribute_crawler_common.nio_data.TaskVO;
@@ -19,15 +21,15 @@ public class TaskQueryNioClient extends Thread {
 
 	private Charset charset = Charset.forName(NioClientConfig.NIO_CHARSET);
 
+	private Logger logger = Logger.getLogger(TaskQueryNioClient.class);
+
 	private SocketChannel sc = null;
 
 	@Override
 	public void run() {
 
 		try {
-
-			init();
-
+			startListen();
 		} catch (IOException e) {
 
 			e.printStackTrace();
@@ -36,11 +38,13 @@ public class TaskQueryNioClient extends Thread {
 
 	}
 
-	public void init() throws IOException {
+	public void startListen() throws IOException {
 
 		selector = Selector.open();
 
 		InetSocketAddress inetSocketAddress = new InetSocketAddress(NioClientConfig.INET_SOCKET_ADDRESS, NioClientConfig.TASK_QUERY_NIO_SERVER_PORT);
+
+		logger.info("Nio client open server : " + NioClientConfig.INET_SOCKET_ADDRESS);
 
 		sc = SocketChannel.open(inetSocketAddress);
 
@@ -59,7 +63,7 @@ public class TaskQueryNioClient extends Thread {
 
 						SocketChannel sc = (SocketChannel) sk.channel();
 
-						ByteBuffer buff = ByteBuffer.allocate(1024);
+						ByteBuffer buff = ByteBuffer.allocate(NioClientConfig.BYTE_BUFF_SIZE);
 
 						String content = "";
 
@@ -92,21 +96,5 @@ public class TaskQueryNioClient extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		// new ClientReaderThread(selector).start();
-
-		// while (true) {
-		//
-		// sc.write(charset.encode(QueryJsonData.TASK_QUERY_JSON));
-		//
-		// try {
-		//
-		// Thread.sleep(NioClientConfig.QUERY_TASK_INTERVAL);
-		//
-		// } catch (InterruptedException e) {
-		//
-		// e.printStackTrace();
-		// }
-		// }
 	}
 }

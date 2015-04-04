@@ -10,7 +10,7 @@ public class TaskQuery {
 
 	public TaskVO queryTask() {
 		TaskVO taskVO = TaskCenter.pollTaskFromWaitQueue();
-		if (taskVO.getTaskId() == 0) {
+		if (null == taskVO || taskVO.getTaskId() == 0) {
 			return taskVO;
 		}
 		if (null != TaskSpeedFeedback.TASK_MAP.get(taskVO.getTaskId())) {

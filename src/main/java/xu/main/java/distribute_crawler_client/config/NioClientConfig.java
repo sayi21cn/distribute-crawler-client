@@ -8,8 +8,10 @@ public class NioClientConfig {
 
 	public static final String NIO_CHARSET = "UTF-8";
 
-	public static final String INET_SOCKET_ADDRESS = "127.0.0.1";
+	public static final String INET_SOCKET_ADDRESS = "192.168.1.10";
 
 	public static final int QUERY_TASK_INTERVAL = 1000 * 60;
+	
+	public static final int BYTE_BUFF_SIZE = 10240000;
 
 }

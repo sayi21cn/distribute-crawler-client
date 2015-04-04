@@ -1,6 +1,7 @@
 /target
 /bin
 /etc
+/logs
 *.git
 *.logs
 *.project

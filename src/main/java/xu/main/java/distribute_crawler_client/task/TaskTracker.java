@@ -28,7 +28,7 @@ public class TaskTracker extends Thread {
 			TaskVO taskVO = taskQuery.queryTask();
 
 			// 无任务
-			if (taskVO.getTaskId() == 0) {
+			if (null == taskVO || taskVO.getTaskId() == 0) {
 				try {
 					logger.info("TaskTracker: no task and sleep " + TaskTrackerConfig.QUERY_TASK_INTERVAL + "ms");
 					Thread.sleep(TaskTrackerConfig.QUERY_TASK_INTERVAL);
@@ -43,9 +43,9 @@ public class TaskTracker extends Thread {
 
 			for (int threadIndex = 0; threadIndex < threadNum; threadIndex++) {
 				TaskExecutionCenter taskExecutionCenter = new TaskExecutionCenter(taskVO);
-				taskExecutionCenter.setName("TaskExecutionCenter_thread_"+threadIndex);
+				taskExecutionCenter.setName("TaskExecutionCenter_thread_" + threadIndex);
 				taskExecutionCenter.start();
-				logger.info("TaskTracker: TaskExecutionCenter_thread_"+threadIndex+" started");
+				logger.info("TaskTracker: TaskExecutionCenter_thread_" + threadIndex + " started");
 			}
 		}
 	}
@@ -80,7 +80,8 @@ public class TaskTracker extends Thread {
 		detailUrlPath.setPathIndexList(detailPathIndexList);
 		detailUrlPath.setAttrName("href");
 
-	//	List<HtmlPath> cssPathList = Arrays.asList(movieTitlePath, detailUrlPath);
+		// List<HtmlPath> cssPathList = Arrays.asList(movieTitlePath,
+		// detailUrlPath);
 	}
 
 }
