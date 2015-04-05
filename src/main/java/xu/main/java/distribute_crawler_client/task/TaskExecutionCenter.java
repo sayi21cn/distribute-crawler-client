@@ -7,10 +7,13 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import xu.main.java.distribute_crawler_client.config.NetConfig;
 import xu.main.java.distribute_crawler_client.config.ServerDbConfig;
+import xu.main.java.distribute_crawler_client.queue.TaskSpeedFeecbackClientQueue;
+import xu.main.java.distribute_crawler_common.conn_data.SpeedFeedbackVO;
+import xu.main.java.distribute_crawler_common.conn_data.TaskVO;
 import xu.main.java.distribute_crawler_common.extractor.ExtractorFactory;
 import xu.main.java.distribute_crawler_common.extractor.IExtractor;
-import xu.main.java.distribute_crawler_common.nio_data.TaskVO;
 import xu.main.java.distribute_crawler_common.util.GsonUtil;
 import xu.main.java.distribute_crawler_common.util.HttpDownload;
 import xu.main.java.distribute_crawler_common.util.StringHandler;
@@ -28,6 +31,7 @@ public class TaskExecutionCenter extends Thread {
 	private Logger logger = Logger.getLogger(TaskExecutionCenter.class);
 	private TaskVO taskVO;
 	private String charset;
+	int lastSpeedFeedback = 0;
 
 	public TaskExecutionCenter(TaskVO taskVO) {
 		this.taskVO = taskVO;
@@ -43,17 +47,41 @@ public class TaskExecutionCenter extends Thread {
 			logger.info("TaskExecutionCenter: " + Thread.currentThread().getName() + " start download url : " + url);
 			String html = HttpDownload.download(url, charset);
 			IExtractor extractor = ExtractorFactory.getInstance().getExtractor("cssExtractor");
-			Map<String, String> resultMap = extractor.extractorColumns(html, taskVO.getTemplateContentVO().getHtmlPathList(), ServerDbConfig.SPLIT_STRING);
-			String sql = buildSaveSQL(resultMap);
-			taskVO.offerInsertSql(sql);
+			extractor.extractorColumns(html, taskVO.getTemplateContentVO().getHtmlPathList(), ServerDbConfig.SPLIT_STRING);
+
+			if (taskVO.getSpeedProgress() - lastSpeedFeedback > NetConfig.UDP_SPEED_FEEDBACK_INTERVAL) {
+				// 进度反馈
+				SpeedFeedbackVO speedFeedbackVO = new SpeedFeedbackVO(taskVO.getTaskId(), taskVO.getSpeedProgress());
+				// TODO: 后续改为存 SpeedFeedbackVO对象以减少爬虫时间消耗
+				String feedbackJson = GsonUtil.toJson(speedFeedbackVO);
+				TaskSpeedFeecbackClientQueue.offerFeedback(feedbackJson);
+				lastSpeedFeedback = taskVO.getSpeedProgress();
+			}
+			// String sql = buildSaveSQL(resultMap);
+			// taskVO.offerInsertSql(sql);
 			// boolean result = MysqlUtil.saveToDb(conn, sql);
 			// System.out.print("数据保存数据库 ");
 			// System.out.println(result ? "成功" : "失败");
 		}
+		// taskVO.getSpeedProgress() - lastSpeedFeedback
+		// >NetConfig.UDP_SPEED_FEEDBACK_INTERVAL
+		if (taskVO.getAlreadyCrawledUrlNum() != taskVO.getUrlCount()) {
+			TaskSpeedFeecbackClientQueue.offerFeedback(GsonUtil.toJson(new SpeedFeedbackVO(taskVO.getTaskId(), 101)));
+			logger.error(String.format("下载线程异常结束,任务进度Id:[%s] ,任务进度:[%s]%", taskVO.getTaskId(), taskVO.getSpeedProgress()));
+			return;
+		}
 
+		if (lastSpeedFeedback != 100) {
+			taskVO.setSpeedProgress(100);
+			SpeedFeedbackVO speedFeedbackVO = new SpeedFeedbackVO(taskVO.getTaskId(), taskVO.getSpeedProgress());
+			String feedbackJson = GsonUtil.toJson(speedFeedbackVO);
+			TaskSpeedFeecbackClientQueue.offerFeedback(feedbackJson);
+			lastSpeedFeedback = taskVO.getSpeedProgress();
+		}
+		logger.info(String.format("任务完成,Id:[%s]", taskVO.getTaskId()));
 	}
 
-	private String buildSaveSQL(Map<String, String> resultMap) {
+	public String buildSaveSQL(Map<String, String> resultMap) {
 		StringBuffer sqlBuffer = new StringBuffer("insert into ");
 		sqlBuffer.append(taskVO.getInsertDbTableName()).append(" (");
 		for (HtmlPath cssPath : taskVO.getTemplateContentVO().getHtmlPathList()) {

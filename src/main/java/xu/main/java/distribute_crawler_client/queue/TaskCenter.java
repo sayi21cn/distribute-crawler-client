@@ -1,9 +1,9 @@
-package xu.main.java.distribute_crawler_client.task;
+package xu.main.java.distribute_crawler_client.queue;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import xu.main.java.distribute_crawler_common.nio_data.TaskVO;
+import xu.main.java.distribute_crawler_common.conn_data.TaskVO;
 
 public class TaskCenter {
 

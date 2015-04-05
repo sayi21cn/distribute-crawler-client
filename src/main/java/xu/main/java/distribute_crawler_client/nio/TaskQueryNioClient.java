@@ -10,16 +10,16 @@ import java.nio.charset.Charset;
 
 import org.apache.log4j.Logger;
 
-import xu.main.java.distribute_crawler_client.config.NioClientConfig;
-import xu.main.java.distribute_crawler_client.task.TaskCenter;
-import xu.main.java.distribute_crawler_common.nio_data.TaskVO;
+import xu.main.java.distribute_crawler_client.config.NetConfig;
+import xu.main.java.distribute_crawler_client.queue.TaskCenter;
+import xu.main.java.distribute_crawler_common.conn_data.TaskVO;
 import xu.main.java.distribute_crawler_common.util.GsonUtil;
 
 public class TaskQueryNioClient extends Thread {
 
 	private Selector selector;
 
-	private Charset charset = Charset.forName(NioClientConfig.NIO_CHARSET);
+	private Charset charset = Charset.forName(NetConfig.NIO_CHARSET);
 
 	private Logger logger = Logger.getLogger(TaskQueryNioClient.class);
 
@@ -42,9 +42,9 @@ public class TaskQueryNioClient extends Thread {
 
 		selector = Selector.open();
 
-		InetSocketAddress inetSocketAddress = new InetSocketAddress(NioClientConfig.INET_SOCKET_ADDRESS, NioClientConfig.TASK_QUERY_NIO_SERVER_PORT);
+		InetSocketAddress inetSocketAddress = new InetSocketAddress(NetConfig.INET_SOCKET_ADDRESS, NetConfig.NIO_TASK_QUERY_SERVER_PORT);
 
-		logger.info("Nio client open server : " + NioClientConfig.INET_SOCKET_ADDRESS);
+		logger.info(String.format("Nio client open server : [ %s ] Port : [ %s ]", NetConfig.INET_SOCKET_ADDRESS, NetConfig.NIO_TASK_QUERY_SERVER_PORT));
 
 		sc = SocketChannel.open(inetSocketAddress);
 
@@ -63,7 +63,7 @@ public class TaskQueryNioClient extends Thread {
 
 						SocketChannel sc = (SocketChannel) sk.channel();
 
-						ByteBuffer buff = ByteBuffer.allocate(NioClientConfig.BYTE_BUFF_SIZE);
+						ByteBuffer buff = ByteBuffer.allocate(NetConfig.NIO_BYTE_BUFF_SIZE);
 
 						String content = "";
 
@@ -80,7 +80,12 @@ public class TaskQueryNioClient extends Thread {
 
 							TaskVO taskVO = GsonUtil.fromJson(content, TaskVO.class);
 
-							TaskCenter.offerTaskToWaitQueue(taskVO);
+							if (null != taskVO) {
+								TaskCenter.offerTaskToWaitQueue(taskVO);
+							} else {
+								logger.error("服务端推送任务为空,系统出现异常！退出！");
+								System.exit(1);
+							}
 
 						} catch (Exception e) {
 

@@ -7,13 +7,13 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 
-import xu.main.java.distribute_crawler_client.config.NioClientConfig;
+import xu.main.java.distribute_crawler_client.config.NetConfig;
 
 public class ClientReaderThread extends Thread {
 
 	private Selector selector;
 
-	private Charset charset = Charset.forName(NioClientConfig.NIO_CHARSET);
+	private Charset charset = Charset.forName(NetConfig.NIO_CHARSET);
 
 	public ClientReaderThread(Selector selector) {
 		this.selector = selector;

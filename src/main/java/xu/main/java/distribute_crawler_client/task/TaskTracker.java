@@ -6,7 +6,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.TaskTrackerConfig;
-import xu.main.java.distribute_crawler_common.nio_data.TaskVO;
+import xu.main.java.distribute_crawler_client.queue.TaskCenter;
+import xu.main.java.distribute_crawler_common.conn_data.TaskVO;
 import xu.main.java.distribute_crawler_common.vo.HtmlPath;
 
 /**
@@ -19,13 +20,11 @@ public class TaskTracker extends Thread {
 
 	private Logger logger = Logger.getLogger(TaskTracker.class);
 
-	private TaskQuery taskQuery = new TaskQuery();
-
 	@Override
 	public void run() {
 		while (true) {
 			logger.info("TaskTracker: begin queryTask");
-			TaskVO taskVO = taskQuery.queryTask();
+			TaskVO taskVO = TaskCenter.pollTaskFromWaitQueue();
 
 			// 无任务
 			if (null == taskVO || taskVO.getTaskId() == 0) {
