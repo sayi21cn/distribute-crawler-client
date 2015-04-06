@@ -25,6 +25,10 @@ public class CrawlerClientStart {
 		// 任务进度反馈线程启动
 		UdpClient speedUdpClient = new UdpClient(NetConfig.INET_SOCKET_ADDRESS, NetConfig.UDP_TASK_SPEED_FEEDBACK_SERVER_PORT);
 		speedUdpClient.start();
+		
+		// 结果反馈线程启动
+		UdpClient extractResultUdpClient = new UdpClient(NetConfig.INET_SOCKET_ADDRESS, NetConfig.UDP_EXTRACT_RESULT_SERVER_PORT);
+		extractResultUdpClient.start();
 
 	}
 

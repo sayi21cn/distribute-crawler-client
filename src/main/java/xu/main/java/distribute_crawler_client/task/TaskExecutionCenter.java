@@ -9,7 +9,7 @@ import java.util.Queue;
 import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.NetConfig;
-import xu.main.java.distribute_crawler_client.config.ServerDbConfig;
+import xu.main.java.distribute_crawler_client.config.TaskTrackerConfig;
 import xu.main.java.distribute_crawler_client.queue.PortQueueClientFactory;
 import xu.main.java.distribute_crawler_common.conn_data.SpeedFeedbackVO;
 import xu.main.java.distribute_crawler_common.conn_data.TaskVO;
@@ -57,7 +57,12 @@ public class TaskExecutionCenter extends Thread {
 			logger.info("TaskExecutionCenter: " + Thread.currentThread().getName() + " start download url : " + url);
 			String html = HttpDownload.download(url, charset);
 			IExtractor extractor = ExtractorFactory.getInstance().getExtractor("cssExtractor");
-			extractor.extractorColumns(html, taskVO.getTemplateContentVO().getHtmlPathList(), ServerDbConfig.SPLIT_STRING);
+			Map<String, String> resultMap = extractor.extractorColumns(html, taskVO.getTemplateContentVO().getHtmlPathList(), TaskTrackerConfig.SPLIT_STRING);
+			resultMap.put("download_url", url);
+			resultMap.put("taskId", String.valueOf(taskVO.getTaskId()));
+
+			String result = GsonUtil.toJson(resultMap);
+			this.queue.offer(result);
 
 			if (taskVO.getSpeedProgress() - taskVO.getLastSpeedFeedback() > NetConfig.UDP_SPEED_FEEDBACK_INTERVAL) {
 				// 进度反馈

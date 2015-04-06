@@ -53,8 +53,11 @@ public class UdpClient extends Thread {
 						Thread.sleep(NetConfig.UDP_SPEED_FEEDBACK_INTERVAL);
 						continue;
 					}
+					byte[] speedBytes = speedfeedbackJson.getBytes();
 					System.out.println("send data:\t" + speedfeedbackJson);
-					outPacket.setData(speedfeedbackJson.getBytes());
+					System.out.println(speedBytes.length);
+					outPacket.setLength(speedBytes.length);
+					outPacket.setData(speedBytes);
 					socket.send(outPacket);
 
 				} catch (Exception e) {

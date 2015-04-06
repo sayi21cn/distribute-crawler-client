@@ -2,12 +2,17 @@ package xu.main.java.distribute_crawler_client.task;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Queue;
 
 import org.apache.log4j.Logger;
 
+import xu.main.java.distribute_crawler_client.config.NetConfig;
 import xu.main.java.distribute_crawler_client.config.TaskTrackerConfig;
-import xu.main.java.distribute_crawler_client.queue.TaskCenter;
+import xu.main.java.distribute_crawler_client.queue.PortQueueClientFactory;
 import xu.main.java.distribute_crawler_common.conn_data.TaskVO;
+import xu.main.java.distribute_crawler_common.util.GsonUtil;
+import xu.main.java.distribute_crawler_common.util.StringHandler;
+import xu.main.java.distribute_crawler_common.util.ThreadUtil;
 import xu.main.java.distribute_crawler_common.vo.HtmlPath;
 
 /**
@@ -20,20 +25,44 @@ public class TaskTracker extends Thread {
 
 	private Logger logger = Logger.getLogger(TaskTracker.class);
 
+	private Queue<String> queue = null;
+
 	@Override
 	public void run() {
+
+		this.queue = PortQueueClientFactory.getInstance().getQueyeByServerPort(NetConfig.NIO_TASK_QUERY_SERVER_PORT);
+
+		if (null == this.queue) {
+			logger.error(NetConfig.NIO_TASK_QUERY_SERVER_PORT);
+			return;
+		}
+
 		while (true) {
 			logger.info("TaskTracker: begin queryTask");
-			TaskVO taskVO = TaskCenter.pollTaskFromWaitQueue();
+
+			System.out.println(String.format("queue size : [%s], queue hash : [%s]", this.queue.size(), this.queue.hashCode()));
+
+			String taskVoJson = this.queue.poll();
+
+			if (StringHandler.isNullOrEmpty(taskVoJson)) {
+				logger.info("TaskTracker: no task and sleep " + TaskTrackerConfig.QUERY_TASK_INTERVAL + "ms");
+				ThreadUtil.sleep(TaskTrackerConfig.QUERY_TASK_INTERVAL);
+				continue;
+			}
+
+			TaskVO taskVO = null;
+			try {
+				taskVO = GsonUtil.fromJson(taskVoJson, TaskVO.class);
+			} catch (Exception e) {
+				logger.error("", e);
+				continue;
+			}
 
 			// 无任务
 			if (null == taskVO || taskVO.getTaskId() == 0) {
-				try {
-					logger.info("TaskTracker: no task and sleep " + TaskTrackerConfig.QUERY_TASK_INTERVAL + "ms");
-					Thread.sleep(TaskTrackerConfig.QUERY_TASK_INTERVAL);
-				} catch (InterruptedException e) {
-					logger.error("TaskTrcaker thread wait occor an error!", e);
-				}
+
+				logger.info("TaskTracker: no task and sleep " + TaskTrackerConfig.QUERY_TASK_INTERVAL + "ms");
+				ThreadUtil.sleep(TaskTrackerConfig.QUERY_TASK_INTERVAL);
 				continue;
 			}
 			logger.info(String.format("TaskTracker: query a task,id:[%s],task_name:[%s],thread_num:[%s]", taskVO.getTaskId(), taskVO.getTaskName(), taskVO.getThreadNum()));

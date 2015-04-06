@@ -7,13 +7,13 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
+import java.util.Queue;
 
 import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.NetConfig;
-import xu.main.java.distribute_crawler_client.queue.TaskCenter;
-import xu.main.java.distribute_crawler_common.conn_data.TaskVO;
-import xu.main.java.distribute_crawler_common.util.GsonUtil;
+import xu.main.java.distribute_crawler_client.queue.PortQueueClientFactory;
+import xu.main.java.distribute_crawler_common.util.StringHandler;
 
 public class TaskQueryNioClient extends Thread {
 
@@ -25,8 +25,16 @@ public class TaskQueryNioClient extends Thread {
 
 	private SocketChannel sc = null;
 
+	private Queue<String> queue = null;
+
 	@Override
 	public void run() {
+
+		this.queue = PortQueueClientFactory.getInstance().getQueyeByServerPort(NetConfig.NIO_TASK_QUERY_SERVER_PORT);
+		if (null == this.queue) {
+			logger.error("");
+			return;
+		}
 
 		try {
 			startListen();
@@ -74,24 +82,18 @@ public class TaskQueryNioClient extends Thread {
 							content += charset.decode(buff);
 						}
 
-						System.out.println("client接收信息: " + content);
+						logger.info("client接收信息: " + content);
 
-						try {
+						// TaskVO taskVO = GsonUtil.fromJson(content,
+						// TaskVO.class);
 
-							TaskVO taskVO = GsonUtil.fromJson(content, TaskVO.class);
-
-							if (null != taskVO) {
-								TaskCenter.offerTaskToWaitQueue(taskVO);
-							} else {
-								logger.error("服务端推送任务为空,系统出现异常！退出！");
-								System.exit(1);
-							}
-
-						} catch (Exception e) {
-
-							e.printStackTrace();
+						if (!StringHandler.isNullOrEmpty(content)) {
+							this.queue.offer(content);
+							logger.info(String.format("offer a task, size : [%s], queue hash : [%s]", this.queue.size(), this.queue.hashCode()));
+						} else {
+							logger.error("服务端推送任务为空,系统出现异常！退出！");
+							System.exit(1);
 						}
-
 						sk.interestOps(SelectionKey.OP_READ);
 					}
 
