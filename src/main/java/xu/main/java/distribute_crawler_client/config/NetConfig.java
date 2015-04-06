@@ -14,9 +14,9 @@ public class NetConfig {
 	
 	/* Task Speed Feedback Udp Server */
 
-	public static final int UDP_TASK_RECORD_SERVER_PORT = 5668;
+	public static final int UDP_TASK_SPEED_FEEDBACK_SERVER_PORT = 5668;
 
-	public static final int UDP_DATA_LEN = 2048;
+//	public static final int UDP_SPEED_DATA_LEN = 2048;
 	
 	/* Task Speed Feedback params */
 	

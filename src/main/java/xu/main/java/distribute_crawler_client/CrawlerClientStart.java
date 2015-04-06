@@ -1,8 +1,9 @@
 package xu.main.java.distribute_crawler_client;
 
+import xu.main.java.distribute_crawler_client.config.NetConfig;
 import xu.main.java.distribute_crawler_client.nio.TaskQueryNioClient;
 import xu.main.java.distribute_crawler_client.task.TaskTracker;
-import xu.main.java.distribute_crawler_client.udp.TaskSpeedUdpClient;
+import xu.main.java.distribute_crawler_client.udp.UdpClient;
 
 public class CrawlerClientStart {
 
@@ -22,8 +23,8 @@ public class CrawlerClientStart {
 		taskTracker.start();
 
 		// 任务进度反馈线程启动
-		TaskSpeedUdpClient taskSpeedUdpClient = new TaskSpeedUdpClient();
-		taskSpeedUdpClient.start();
+		UdpClient speedUdpClient = new UdpClient(NetConfig.INET_SOCKET_ADDRESS, NetConfig.UDP_TASK_SPEED_FEEDBACK_SERVER_PORT);
+		speedUdpClient.start();
 
 	}
 
