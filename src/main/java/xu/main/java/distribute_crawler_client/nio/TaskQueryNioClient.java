@@ -30,7 +30,7 @@ public class TaskQueryNioClient extends Thread {
 	public void run() {
 		
 		if (null == this.queue) {
-			logger.error("");
+			logger.error("TaskQueryNioClient queue Null, return");
 			return;
 		}
 

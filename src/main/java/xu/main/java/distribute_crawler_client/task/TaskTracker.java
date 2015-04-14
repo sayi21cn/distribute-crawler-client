@@ -6,7 +6,6 @@ import java.util.Queue;
 
 import org.apache.log4j.Logger;
 
-import xu.main.java.distribute_crawler_client.config.NetConfig;
 import xu.main.java.distribute_crawler_client.config.TaskTrackerConfig;
 import xu.main.java.distribute_crawler_common.conn_data.TaskVO;
 import xu.main.java.distribute_crawler_common.util.GsonUtil;
@@ -34,7 +33,7 @@ public class TaskTracker extends Thread {
 	public void run() {
 
 		if (null == this.taskQueue) {
-			logger.error(NetConfig.NIO_TASK_QUERY_SERVER_PORT);
+			logger.error("TaskTracker taskQueue NULL, return");
 			return;
 		}
 
