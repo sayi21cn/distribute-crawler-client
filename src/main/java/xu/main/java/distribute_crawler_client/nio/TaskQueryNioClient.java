@@ -12,7 +12,6 @@ import java.util.Queue;
 import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.NetConfig;
-import xu.main.java.distribute_crawler_client.queue.PortQueueClientFactory;
 import xu.main.java.distribute_crawler_common.util.StringHandler;
 
 public class TaskQueryNioClient extends Thread {
@@ -29,8 +28,7 @@ public class TaskQueryNioClient extends Thread {
 
 	@Override
 	public void run() {
-
-		this.queue = PortQueueClientFactory.getInstance().getQueyeByServerPort(NetConfig.NIO_TASK_QUERY_SERVER_PORT);
+		
 		if (null == this.queue) {
 			logger.error("");
 			return;
@@ -103,5 +101,9 @@ public class TaskQueryNioClient extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void setQueue(Queue<String> queue) {
+		this.queue = queue;
 	}
 }

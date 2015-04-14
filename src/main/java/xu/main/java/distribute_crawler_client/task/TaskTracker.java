@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.NetConfig;
 import xu.main.java.distribute_crawler_client.config.TaskTrackerConfig;
-import xu.main.java.distribute_crawler_client.queue.PortQueueClientFactory;
 import xu.main.java.distribute_crawler_common.conn_data.TaskVO;
 import xu.main.java.distribute_crawler_common.util.GsonUtil;
 import xu.main.java.distribute_crawler_common.util.StringHandler;
@@ -25,14 +24,16 @@ public class TaskTracker extends Thread {
 
 	private Logger logger = Logger.getLogger(TaskTracker.class);
 
-	private Queue<String> queue = null;
+	private Queue<String> taskQueue = null;
+
+	private Queue<String> speedQueue = null;
+
+	private Queue<String> resultQueue = null;
 
 	@Override
 	public void run() {
 
-		this.queue = PortQueueClientFactory.getInstance().getQueyeByServerPort(NetConfig.NIO_TASK_QUERY_SERVER_PORT);
-
-		if (null == this.queue) {
+		if (null == this.taskQueue) {
 			logger.error(NetConfig.NIO_TASK_QUERY_SERVER_PORT);
 			return;
 		}
@@ -40,9 +41,9 @@ public class TaskTracker extends Thread {
 		while (true) {
 			logger.info("TaskTracker: begin queryTask");
 
-			System.out.println(String.format("queue size : [%s], queue hash : [%s]", this.queue.size(), this.queue.hashCode()));
+			System.out.println(String.format("queue size : [%s], queue hash : [%s]", this.taskQueue.size(), this.taskQueue.hashCode()));
 
-			String taskVoJson = this.queue.poll();
+			String taskVoJson = this.taskQueue.poll();
 
 			if (StringHandler.isNullOrEmpty(taskVoJson)) {
 				logger.info("TaskTracker: no task and sleep " + TaskTrackerConfig.QUERY_TASK_INTERVAL + "ms");
@@ -71,11 +72,25 @@ public class TaskTracker extends Thread {
 
 			for (int threadIndex = 0; threadIndex < threadNum; threadIndex++) {
 				TaskExecutionCenter taskExecutionCenter = new TaskExecutionCenter(taskVO);
+				taskExecutionCenter.setSpeedQueue(speedQueue);
+				taskExecutionCenter.setResultQueue(resultQueue);
 				taskExecutionCenter.setName("TaskExecutionCenter_thread_" + threadIndex);
 				taskExecutionCenter.start();
 				logger.info("TaskTracker: TaskExecutionCenter_thread_" + threadIndex + " started");
 			}
 		}
+	}
+
+	public void setTaskQueue(Queue<String> taskQueue) {
+		this.taskQueue = taskQueue;
+	}
+
+	public void setSpeedQueue(Queue<String> speedQueue) {
+		this.speedQueue = speedQueue;
+	}
+
+	public void setResultQueue(Queue<String> resultQueue) {
+		this.resultQueue = resultQueue;
 	}
 
 	public static void main(String[] args) {

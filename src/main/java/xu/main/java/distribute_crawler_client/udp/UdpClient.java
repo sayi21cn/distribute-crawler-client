@@ -10,7 +10,6 @@ import java.util.Queue;
 import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.NetConfig;
-import xu.main.java.distribute_crawler_client.queue.PortQueueClientFactory;
 
 public class UdpClient extends Thread {
 
@@ -29,10 +28,6 @@ public class UdpClient extends Thread {
 	public UdpClient(String serverIp, int serverPort) {
 		this.serverIp = serverIp;
 		this.serverPort = serverPort;
-		this.queue = PortQueueClientFactory.getInstance().getQueyeByServerPort(serverPort);
-		if (null == this.queue) {
-			logger.error(String.format("ClientPortQueue map value is NULL by Server Port : [%s]", serverPort));
-		}
 	}
 
 	@Override
@@ -56,7 +51,7 @@ public class UdpClient extends Thread {
 					byte[] speedBytes = speedfeedbackJson.getBytes();
 					System.out.println("send data:\t" + speedfeedbackJson);
 					System.out.println(speedBytes.length);
-					outPacket.setLength(speedBytes.length);
+		//			outPacket.setLength(speedBytes.length);
 					outPacket.setData(speedBytes);
 					socket.send(outPacket);
 
@@ -71,5 +66,9 @@ public class UdpClient extends Thread {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void setQueue(Queue<String> queue) {
+		this.queue = queue;
 	}
 }

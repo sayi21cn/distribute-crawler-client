@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.NetConfig;
 import xu.main.java.distribute_crawler_client.config.TaskTrackerConfig;
-import xu.main.java.distribute_crawler_client.queue.PortQueueClientFactory;
 import xu.main.java.distribute_crawler_common.conn_data.SpeedFeedbackVO;
 import xu.main.java.distribute_crawler_common.conn_data.TaskVO;
 import xu.main.java.distribute_crawler_common.extractor.ExtractorFactory;
@@ -32,13 +31,13 @@ public class TaskExecutionCenter extends Thread {
 	private Logger logger = Logger.getLogger(TaskExecutionCenter.class);
 	private TaskVO taskVO;
 	private String charset;
-	private Queue<String> queue = null;
+	private Queue<String> speedQueue = null;
+	private Queue<String> resultQueue = null;
 
 	public TaskExecutionCenter(TaskVO taskVO) {
 		this.taskVO = taskVO;
 		this.charset = taskVO.getCharset();
-		this.queue = PortQueueClientFactory.getInstance().getQueyeByServerPort(NetConfig.UDP_TASK_SPEED_FEEDBACK_SERVER_PORT);
-		if (null == this.queue) {
+		if (null == this.speedQueue) {
 			logger.error("");
 		}
 	}
@@ -46,7 +45,7 @@ public class TaskExecutionCenter extends Thread {
 	@Override
 	public void run() {
 
-		if (null == this.queue) {
+		if (null == this.speedQueue) {
 			logger.info("return");
 			return;
 		}
@@ -62,14 +61,14 @@ public class TaskExecutionCenter extends Thread {
 			resultMap.put("taskId", String.valueOf(taskVO.getTaskId()));
 
 			String result = GsonUtil.toJson(resultMap);
-			this.queue.offer(result);
+			this.resultQueue.offer(result);
 
 			if (taskVO.getSpeedProgress() - taskVO.getLastSpeedFeedback() > NetConfig.UDP_SPEED_FEEDBACK_INTERVAL) {
 				// 进度反馈
 				SpeedFeedbackVO speedFeedbackVO = new SpeedFeedbackVO(taskVO.getTaskId(), taskVO.getSpeedProgress());
 				// TODO: 后续改为存 SpeedFeedbackVO对象以减少爬虫时间消耗
 				String feedbackJson = GsonUtil.toJson(speedFeedbackVO);
-				this.queue.offer(feedbackJson);
+				this.speedQueue.offer(feedbackJson);
 				taskVO.setLastSpeedFeedback(taskVO.getSpeedProgress());
 			}
 			// String sql = buildSaveSQL(resultMap);
@@ -81,7 +80,7 @@ public class TaskExecutionCenter extends Thread {
 		// taskVO.getSpeedProgress() - lastSpeedFeedback
 		// >NetConfig.UDP_SPEED_FEEDBACK_INTERVAL
 		if (taskVO.getAlreadyCrawledUrlNum() != taskVO.getUrlCount()) {
-			this.queue.offer(GsonUtil.toJson(new SpeedFeedbackVO(taskVO.getTaskId(), 101)));
+			this.speedQueue.offer(GsonUtil.toJson(new SpeedFeedbackVO(taskVO.getTaskId(), 101)));
 			logger.error(String.format("下载线程异常结束,任务进度Id:[%s] ,任务进度:[%s]%", taskVO.getTaskId(), taskVO.getSpeedProgress()));
 			return;
 		}
@@ -90,10 +89,18 @@ public class TaskExecutionCenter extends Thread {
 			taskVO.setSpeedProgress(100);
 			SpeedFeedbackVO speedFeedbackVO = new SpeedFeedbackVO(taskVO.getTaskId(), taskVO.getSpeedProgress());
 			String feedbackJson = GsonUtil.toJson(speedFeedbackVO);
-			this.queue.offer(feedbackJson);
+			this.speedQueue.offer(feedbackJson);
 			taskVO.setLastSpeedFeedback(taskVO.getSpeedProgress());
 		}
 		logger.info(String.format("[ %s ]任务完成,Id:[%s]", Thread.currentThread().getName(), taskVO.getTaskId()));
+	}
+
+	public void setSpeedQueue(Queue<String> speedQueue) {
+		this.speedQueue = speedQueue;
+	}
+
+	public void setResultQueue(Queue<String> resultQueue) {
+		this.resultQueue = resultQueue;
 	}
 
 	public String buildSaveSQL(Map<String, String> resultMap) {
