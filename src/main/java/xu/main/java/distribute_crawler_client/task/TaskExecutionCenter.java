@@ -37,16 +37,13 @@ public class TaskExecutionCenter extends Thread {
 	public TaskExecutionCenter(TaskVO taskVO) {
 		this.taskVO = taskVO;
 		this.charset = taskVO.getCharset();
-		if (null == this.speedQueue) {
-			logger.error("");
-		}
 	}
 
 	@Override
 	public void run() {
 
 		if (null == this.speedQueue) {
-			logger.info("return");
+			logger.info("TaskExecutionCenter speedQueue NULL ,return");
 			return;
 		}
 
