@@ -10,7 +10,7 @@ public class NetConfig {
 
 	public static final String NIO_CHARSET = "UTF-8";
 
-	public static final int NIO_BYTE_BUFF_SIZE = 102400000;
+	public static final int NIO_BYTE_BUFF_SIZE = 10240000;
 
 	/* Task Speed Feedback Udp Server */
 
