@@ -3,8 +3,6 @@ package xu.main.java.distribute_crawler_client;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-import org.apache.log4j.PropertyConfigurator;
-
 import xu.main.java.distribute_crawler_client.config.NetConfig;
 import xu.main.java.distribute_crawler_client.nio.TaskQueryNioClient;
 import xu.main.java.distribute_crawler_client.task.TaskTracker;
@@ -17,7 +15,7 @@ public class CrawlerClientStart {
 
 	public static void main(String[] args) {
 
-		PropertyConfigurator.configure("etc/log4j.properties");
+//		PropertyConfigurator.configure("etc/log4j.properties");
 
 		/* 服务端任务推送队列 */
 		Queue<String> pushedQueue = new LinkedBlockingDeque<String>();
@@ -43,11 +41,13 @@ public class CrawlerClientStart {
 
 		// 任务进度反馈线程启动
 		UdpClient speedUdpClient = new UdpClient(NetConfig.INET_SOCKET_ADDRESS, NetConfig.UDP_TASK_SPEED_FEEDBACK_SERVER_PORT);
+		speedUdpClient.setName("SpeedUdpClient");
 		speedUdpClient.setQueue(speedQueue);
 		speedUdpClient.start();
 		
 		// 结果反馈线程启动
 		UdpClient extractResultUdpClient = new UdpClient(NetConfig.INET_SOCKET_ADDRESS, NetConfig.UDP_EXTRACT_RESULT_SERVER_PORT);
+		extractResultUdpClient.setName("ExtractResultUdpClient");
 		extractResultUdpClient.setQueue(resultQueue);
 		extractResultUdpClient.start();
 

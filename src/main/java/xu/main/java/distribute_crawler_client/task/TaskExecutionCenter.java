@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import xu.main.java.distribute_crawler_client.config.NetConfig;
 import xu.main.java.distribute_crawler_client.config.TaskTrackerConfig;
+import xu.main.java.distribute_crawler_common.conn_data.ExtractResultVO;
 import xu.main.java.distribute_crawler_common.conn_data.SpeedFeedbackVO;
 import xu.main.java.distribute_crawler_common.conn_data.TaskVO;
 import xu.main.java.distribute_crawler_common.extractor.ExtractorFactory;
@@ -55,9 +56,13 @@ public class TaskExecutionCenter extends Thread {
 			IExtractor extractor = ExtractorFactory.getInstance().getExtractor("cssExtractor");
 			Map<String, String> resultMap = extractor.extractorColumns(html, taskVO.getTemplateContentVO().getHtmlPathList(), TaskTrackerConfig.SPLIT_STRING);
 			resultMap.put("download_url", url);
-			resultMap.put("taskId", String.valueOf(taskVO.getTaskId()));
+			resultMap.put("task_id", String.valueOf(taskVO.getTaskId()));
 
-			String result = GsonUtil.toJson(resultMap);
+			ExtractResultVO extractResultVO = new ExtractResultVO(taskVO.getTaskId());
+			extractResultVO.setResult(resultMap);
+			extractResultVO.setSaveTableName(taskVO.getInsertDbTableName());
+
+			String result = GsonUtil.toJson(extractResultVO);
 			this.resultQueue.offer(result);
 
 			if (taskVO.getSpeedProgress() - taskVO.getLastSpeedFeedback() > NetConfig.UDP_SPEED_FEEDBACK_INTERVAL) {
